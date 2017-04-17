@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/weather_share">
+        <item
+            android:id="@+id/nav_rate_us"
+            android:icon="@mipmap/ic_nav_rate_us"
+            android:title="@string/nav_rate_us"/>
+
+        <item
+            android:id="@+id/nav_share_weather"
+            android:icon="@mipmap/ic_nav_share"
+            android:title="@string/nav_share_weather"/>
+
+        <item
+            android:id="@+id/nav_share_lifely"
+            android:icon="@mipmap/ic_nav_lifely"
+            android:title="@string/nav_share_lifely"/>
+
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@mipmap/ic_nav_feedback"
+            android:title="@string/nav_feedback"/>
+
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@mipmap/ic_nav_about"
+            android:title="@string/nav_about"/>
+    </group>
+
+</menu>

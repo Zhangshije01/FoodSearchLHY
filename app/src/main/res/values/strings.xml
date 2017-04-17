@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">FoodSearch</string>
+    <!-- for navigation view -->
+    <string name="nav_rate_us">Rate Us</string>
+    <string name="nav_share_weather">Share UFO Cleaner</string>
+    <string name="nav_share_lifely">Lifely</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_feedback">Feedback</string>
+    <string name="nav_about">About</string>
+    <string name="nav_open">open</string>
+    <string name="nav_close">close</string>
+
+    <!-- for main botttom radioButton name-->
+    <string name="radiobutton_main_bottom_one">首页</string>
+    <string name="radiobutton_main_bottom_two">地图</string>
+    <string name="radiobutton_main_bottom_three">我的</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="detail_denglu">登录</string>
+    <string name="detail_zhuce">注册</string>
+
+    <!-- for custom font -->
+    <string name="font_palatino">palatino.otf</string>
+    <string name="font_regular">GTWalsheim_Regular.otf</string>
+    <string name="font_medium">GTWalsheim_Medium.otf</string>
+    <string name="font_bold">GTWalsheim_Bold.otf</string>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ReSizeFrameLayout">
+        <attr name="ratio" format="float" />
+        <attr name="fixSize" format="boolean" />
+        <attr name="measureWithHeight" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="TextViewPlus">
+        <attr name="customFont" format="string" />
+    </declare-styleable>
+
+
+</resources>

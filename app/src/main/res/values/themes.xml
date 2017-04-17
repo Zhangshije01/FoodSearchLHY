@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="FoodSearch.Theme" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorControlNormal">@color/common_white</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:textColorPrimary">@color/common_white</item>
+    </style>
+
+    <style name="FoodSearch.Theme.NoActionBar" parent="FoodSearch.Theme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="FoodSearch.Theme.MainActivity" parent="FoodSearch.Theme">
+        <item name="android:windowBackground">@mipmap/ic_bg</item>
+    </style>
+
+</resources>

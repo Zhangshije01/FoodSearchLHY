@@ -114,12 +114,12 @@ public class MainActivity extends AppCompatActivity implements HomeContract.MvpV
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.tool_bar_menu, menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.tool_bar_menu, menu);
+//
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
     private void notifyDrawerStatus(boolean isOpen) {
         if (isOpen) {

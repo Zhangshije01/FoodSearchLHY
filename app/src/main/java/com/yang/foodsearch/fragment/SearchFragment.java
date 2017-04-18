@@ -8,10 +8,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.yang.foodsearch.R;
 import com.yang.foodsearch.databinding.FragmentSearchBinding;
@@ -46,6 +49,8 @@ public class SearchFragment extends Fragment {
     ItemSearchOneBinding itemSearchOne;
     ItemSearchTwoBinding itemSearchTwo;
     ItemSearchTabBinding itemSearchTab;
+    private ImageView iv_location_city;
+    private TextView tv_location_city;
     /**
      * mInterHandler是一个私有静态内部类继承自Handler，内部持有MainActivity的弱引用，
      * 避免内存泄露
@@ -91,34 +96,35 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mListView = mBinding.searchList;
+
+        View view_header_icon = getActivity().getLayoutInflater().inflate(R.layout.item_search_header_icon,mListView,false);
+        mListView.addHeaderView(view_header_icon);
+
+        View view_item_search_one = getActivity().getLayoutInflater().inflate(R.layout.item_search_one,mListView,false);
+        mListView.addHeaderView(view_item_search_one);
+
+        View view_item_search_two = getActivity().getLayoutInflater().inflate(R.layout.item_search_two,mListView,false);
+        mListView.addHeaderView(view_item_search_two);
+
+        View view_item_search_tab = getActivity().getLayoutInflater().inflate(R.layout.item_search_tab,mListView,false);
+        mListView.addHeaderView(view_item_search_tab);
+
+        iv_location_city = (ImageView) view_header_icon.findViewById(R.id.iv_search_city);
+        iv_location_city.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: ");
+                startActivityForResult(new Intent(getContext(), CityPickerActivity.class),
+                        REQUEST_CODE_PICK_CITY);
+            }
+        });
+
+        tv_location_city  = (TextView) view_header_icon.findViewById(R.id.tv_search_city);
         String[] data = new String[]{"hello world","hello world","hello world","hello world",
                 "hello world","hello world","hello world","hello world","hello world",
                 "hello world","hello world","hello world","hello world","hello world",};
         mDatas = new ArrayList<String>(Arrays.asList(data));
         mAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,mDatas);
-
-        itemHeaderIcon = ItemSearchHeaderIconBinding.inflate(LayoutInflater.from(getContext()),mListView,false);
-        View itemHeader = itemHeaderIcon.getRoot();
-        mListView.addHeaderView(itemHeader);
-
-        itemSearchOne = ItemSearchOneBinding.inflate(LayoutInflater.from(getContext()),mListView,false);
-        View header_item_search_one = itemSearchOne.getRoot();
-        mListView.addHeaderView(header_item_search_one);
-
-        itemSearchTwo = ItemSearchTwoBinding.inflate(LayoutInflater.from(getContext()),mListView,false);
-        View header_item_search_two = itemSearchTwo.getRoot();
-        mListView.addHeaderView(header_item_search_two);
-
-        itemSearchTab = ItemSearchTabBinding.inflate(LayoutInflater.from(getContext()),mListView,false);
-        View header_item_tab = itemSearchTab.getRoot();
-        mListView.addHeaderView(header_item_tab);
-        itemHeaderIcon.ivSearchCity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(new Intent(getContext(), CityPickerActivity.class),
-                        REQUEST_CODE_PICK_CITY);
-            }
-        });
         mListView.setAdapter(mAdapter);
         mListView.setOnMeiTuanRefreshListener(new MeiTuanListView.OnMeiTuanRefreshListener() {
             @Override
@@ -147,7 +153,7 @@ public class SearchFragment extends Fragment {
         if (requestCode == REQUEST_CODE_PICK_CITY && resultCode == RESULT_OK){
             if (data != null){
                 String city = data.getStringExtra(CityPickerActivity.KEY_PICKED_CITY);
-                itemHeaderIcon.tvSearchCity.setText("" + city);
+                tv_location_city.setText("" + city);
             }
         }
     }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@mipmap/icon_header"
+        >
+        <com.yang.foodsearch.view.TextViewPlus
+            android:id="@+id/tv_search_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="city"
+            android:layout_centerInParent="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="15dp"
+            android:textSize="14sp"
+            android:layout_centerVertical="true"
+            app:customFont="@string/font_bold"/>
+
+        <ImageView
+            android:id="@+id/iv_search_city"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:src="@mipmap/icon_locate"/>
+
+    </RelativeLayout>
+
+</layout>

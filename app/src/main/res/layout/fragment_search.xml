@@ -6,22 +6,26 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.yang.foodsearch.view.TextViewPlus
-            android:id="@+id/tv_search_city"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="city"
-            android:gravity="center"
-            android:textSize="14sp"
-            app:customFont="@string/font_bold"/>
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_search_city"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="20dp"
-            android:src="@mipmap/icon_locate"/>
+            <include
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/item_search_tab_near"
+                android:visibility="visible"/>
 
+
+            <com.yang.foodsearch.view.MeiTuanListView
+                android:id="@+id/search_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:background="#ffeeee">
+
+            </com.yang.foodsearch.view.MeiTuanListView>
+        </FrameLayout>
 
 
 

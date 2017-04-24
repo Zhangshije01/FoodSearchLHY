@@ -4,7 +4,9 @@
     android:layout_height="match_parent">
 
     <ListView
-        android:background="#ff9966"
+        android:layout_marginTop="45dp"
+        android:layout_gravity="center"
+        android:background="#FFD1A4"
         android:id="@+id/listview_item_meishi"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

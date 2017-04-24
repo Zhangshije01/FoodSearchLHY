@@ -39,7 +39,7 @@
 
         <TextView
             android:id="@+id/tv_tab_business_bar_paixu"
-
+            android:maxLength="4"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

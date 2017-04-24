@@ -396,6 +396,7 @@ public class SearchFragment extends Fragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 viewmeishi.setVisibility(View.INVISIBLE);
                 String category = adapter.getItem(position);
+                tv_search_bar_meishi.setText(category);
                 HttpUtil.getMeishi(city_name, category,null, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
@@ -423,7 +424,7 @@ public class SearchFragment extends Fragment{
         });
 
         List<String> list_paixu = new ArrayList<>();
-        ArrayAdapter<String> adapter_paixu = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,list_paixu);
+        final ArrayAdapter<String> adapter_paixu = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,list_paixu);
         ListView listview_paixu = (ListView) viewpaixu.findViewById(R.id.listview_item_paixu);
         listview_paixu.setAdapter(adapter_paixu);
 
@@ -436,13 +437,14 @@ public class SearchFragment extends Fragment{
         list_paixu.add("点评数量多优先");
         list_paixu.add("人均价格低优先");
         list_paixu.add("人均价格高优先");
-        adapter.notifyDataSetChanged();
+        adapter_paixu.notifyDataSetChanged();
 
         listview_paixu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 viewpaixu.setVisibility(View.INVISIBLE);
                 int sort = position+1;
+                tv_search_bar_paixu.setText(adapter_paixu.getItem(position));
                 HttpUtil.getFoods(city_name,sort,null, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {

@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yang.foodsearch.R;
-import com.yang.foodsearch.activity.DetailActivity;
+import com.yang.foodsearch.activity.DetailUserActivity;
 import com.yang.foodsearch.databinding.FragmentMyBinding;
 
 /**
@@ -33,7 +33,7 @@ public class MyFragment extends Fragment {
         myBinding.llMyDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DetailActivity.start(getContext());
+                DetailUserActivity.start(getContext());
             }
         });
     }

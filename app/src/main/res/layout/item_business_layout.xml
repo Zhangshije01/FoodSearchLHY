@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/iv_item_business_picture"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/bucket_no_picture" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="5dp" >
+
+        <TextView
+            android:id="@+id/tv_item_business_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="马兰拉面"
+            android:textColor="#ff000000"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical" >
+
+            <ImageView
+                android:id="@+id/iv_item_business_rating"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/movie_star50"/>
+
+            <TextView
+                android:id="@+id/tv_item_business_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="￥110元/人"
+                android:textColor="#ff000000"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical" >
+
+            <TextView
+                android:id="@+id/tv_item_business_info"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="潘家园 面食"
+                android:textColor="#ff6e6e6e"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_item_business_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="400米"
+                android:textColor="#ff6e6e6e"
+                android:gravity="center_vertical"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

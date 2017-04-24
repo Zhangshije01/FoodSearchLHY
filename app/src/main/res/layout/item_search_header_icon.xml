@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <RelativeLayout
+        android:id="@+id/relative_search_city"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:background="@mipmap/icon_header"
@@ -11,7 +12,7 @@
             android:id="@+id/tv_search_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="city"
+            android:text="北京"
             android:layout_centerInParent="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="15dp"

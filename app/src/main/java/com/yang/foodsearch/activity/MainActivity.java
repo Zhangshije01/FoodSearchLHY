@@ -2,6 +2,7 @@ package com.yang.foodsearch.activity;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.provider.SyncStateContract;
 import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,6 +25,8 @@ import com.yang.foodsearch.fragment.SearchFragment;
 import com.yang.foodsearch.mvp.contract.HomeContract;
 import com.yang.foodsearch.mvp.precenter.HomePresenter;
 import com.yang.foodsearch.rx.RxActionBarDrawerToggle;
+
+import org.mozilla.universalchardet.Constants;
 
 import rx.Observable;
 import rx.Subscription;
@@ -80,6 +83,9 @@ public class MainActivity extends AppCompatActivity implements HomeContract.MvpV
             }
         });
         mSubscription.add(subscription);
+
+        //判断地图位置访问权限
+
     }
     public void initFragment(){
         myFragment = new MyFragment();

@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background_ccccc">
+
+    <com.yang.foodsearch.view.TextViewPlus
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="优惠"
+        android:textSize="@dimen/text_size_bigger"
+        android:textColor="@color/color_black_text_user"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"/>
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_search_shaixuan"
+                android:text="买单\n在线支付"
+                android:textColor="@color/color_black_text_user"
+                android:textSize="@dimen/text_size_big"
+                />
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_search_shaixuan"
+
+                android:text="团购\n优惠套餐"
+                android:textColor="@color/color_black_text_user"
+
+                android:textSize="@dimen/text_size_big"
+                />
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_search_shaixuan"
+
+                android:text="会员卡\n优惠特权"
+                android:textColor="@color/color_black_text_user"
+
+                android:textSize="@dimen/text_size_big"
+                />
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_search_shaixuan"
+
+                android:text="优惠活动\n促销"
+                android:textColor="@color/color_black_text_user"
+
+                android:textSize="@dimen/text_size_big"
+                />
+        </RadioGroup>
+
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_background_gggg"/>
+
+    <com.yang.foodsearch.view.TextViewPlus
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="服务"
+        android:textSize="@dimen/text_size_bigger"
+        android:textColor="@color/color_black_text_user"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"/>
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_search_shaixuan"
+
+                android:text="预定"
+                android:textColor="@color/color_black_text_user"
+                android:textSize="@dimen/text_size_big"
+                />
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_search_shaixuan"
+
+                android:text="排队"
+                android:textColor="@color/color_black_text_user"
+
+                android:textSize="@dimen/text_size_big"
+                />
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_search_shaixuan"
+
+                android:text="点餐"
+                android:textColor="@color/color_black_text_user"
+
+                android:textSize="@dimen/text_size_big"
+                />
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_search_shaixuan"
+
+                android:text="外卖"
+                android:textColor="@color/color_black_text_user"
+
+                android:textSize="@dimen/text_size_big"
+                />
+        </RadioGroup>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_background_gggg"/>
+    <com.yang.foodsearch.view.TextViewPlus
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="价格"
+        android:textSize="@dimen/text_size_bigger"
+        android:textColor="@color/color_black_text_user"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"/>
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_search_shaixuan"
+
+                android:text="50以下"
+                android:textColor="@color/color_black_text_user"
+                android:textSize="@dimen/text_size_big"
+                />
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_search_shaixuan"
+
+                android:text="50-100"
+                android:textColor="@color/color_black_text_user"
+
+                android:textSize="@dimen/text_size_big"
+                />
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_search_shaixuan"
+
+                android:text="100-300"
+                android:textColor="@color/color_black_text_user"
+
+                android:textSize="@dimen/text_size_big"
+                />
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_search_shaixuan"
+
+                android:text="300以上"
+                android:textColor="@color/color_black_text_user"
+
+                android:textSize="@dimen/text_size_big"
+                />
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_background_gggg"/>
+    <com.yang.foodsearch.view.TextViewPlus
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="更多"
+        android:textSize="@dimen/text_size_bigger"
+        android:textColor="@color/color_black_text_user"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"/>
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_search_shaixuan"
+
+                android:text="新店"
+                android:textColor="@color/color_black_text_user"
+                android:textSize="@dimen/text_size_big"
+                />
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_search_shaixuan"
+
+                android:text="营业中"
+                android:textColor="@color/color_black_text_user"
+
+                android:textSize="@dimen/text_size_big"
+                />
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_search_shaixuan"
+
+                android:text="有WiFi"
+                android:textColor="@color/color_black_text_user"
+
+                android:textSize="@dimen/text_size_big"
+                />
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_search_shaixuan"
+
+                android:text="可停车"
+                android:textColor="@color/color_black_text_user"
+
+                android:textSize="@dimen/text_size_big"
+                />
+        </RadioGroup>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/color_background_gray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp">
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/shape_button_background_gray"
+            android:text="重置"
+            android:textColor="@color/color_black_text_user"/>
+        <Button
+            android:id="@+id/bt_search_shaixuan_queding"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="wrap_content"
+            android:text="确定"
+            android:background="@drawable/shape_button_background"/>
+    </LinearLayout>
+
+</LinearLayout>

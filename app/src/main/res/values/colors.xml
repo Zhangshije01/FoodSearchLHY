@@ -14,5 +14,10 @@
 
     <!--backgroung -->
     <color name="color_background_gray">#FFFFDF</color>
+    <color name="color_background_red">#FF9933</color>
     <color name="color_background">#FFFFF4</color>
+    <color name="color_background_ccccc">#ffffee</color>
+    <color name="color_background_ffff">#ffffff</color>
+    <color name="color_background_gggg">#cccccc</color>
+
 </resources>

@@ -1,21 +1,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <include
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                layout="@layout/item_search_tab_near"
-                android:visibility="visible"/>
-
 
             <com.yang.foodsearch.view.MeiTuanListView
                 android:id="@+id/search_list"
@@ -25,10 +13,24 @@
                 android:background="#ffeeee">
 
             </com.yang.foodsearch.view.MeiTuanListView>
+
+            <include
+                android:id="@+id/item_search_tab_near"
+                layout="@layout/item_search_tab_near"
+                android:visibility="invisible"
+                />
+            <include
+                android:id="@+id/item_search_tab_meishi"
+                layout="@layout/item_search_tab_meishi"
+                android:visibility="invisible"/>
+            <include
+                android:id="@+id/item_search_tab_paixu"
+                layout="@layout/item_search_tab_paixu"
+                android:visibility="invisible"/>
+            <include
+                android:id="@+id/item_search_tab_shaixuan"
+                layout="@layout/item_search_tab_shaixuan"
+                android:visibility="invisible"/>
         </FrameLayout>
-
-
-
-    </LinearLayout>
 
 </layout>

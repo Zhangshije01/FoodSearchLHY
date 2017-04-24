@@ -54,7 +54,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.DetailActivity" />
+        <activity android:name=".activity.DetailUserActivity" />
         <activity android:name=".activity.BaseActivity" />
         <activity android:name=".activity.RegistActivity" />
         <activity
@@ -72,6 +72,8 @@
             android:enabled="true"
             android:process=":remote" />
 
+        <activity android:name=".activity.DetailBussinessActivity" />
+        <activity android:name=".activity.TextActivity"></activity>
     </application>
 
 </manifest>

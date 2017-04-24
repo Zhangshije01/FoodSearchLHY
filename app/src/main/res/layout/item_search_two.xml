@@ -60,8 +60,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="15dp"
                 android:src="@mipmap/ad1" />
         </LinearLayout>
 
@@ -82,7 +82,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="抢超值福袋"
+                    android:text="名店优惠"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -99,7 +99,7 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingTop="3dp"
-                        android:text="告白赢福利"
+                        android:text="优质餐厅精选"
                         android:textColor="#ff3e95e5"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -109,8 +109,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="15dp"
                 android:src="@mipmap/ad2" />
         </LinearLayout>
     </LinearLayout>

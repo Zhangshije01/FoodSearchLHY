@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 
 import com.yang.foodsearch.R;
@@ -14,7 +13,7 @@ import com.yang.foodsearch.databinding.ActivityDetailBinding;
 import com.yang.foodsearch.mvp.contract.HomeContract;
 import com.yang.foodsearch.mvp.precenter.HomePresenter;
 
-public class DetailActivity extends AppCompatActivity implements HomeContract.MvpView{
+public class DetailUserActivity extends AppCompatActivity implements HomeContract.MvpView{
 
     ActivityDetailBinding mBinding;
     String myDetailName;
@@ -22,7 +21,7 @@ public class DetailActivity extends AppCompatActivity implements HomeContract.Mv
     private HomeContract.Presenter mPresenter;
     private ProgressDialog progressDialog_login;
     public static void start(Context context){
-        Intent intent = new Intent(context,DetailActivity.class);
+        Intent intent = new Intent(context,DetailUserActivity.class);
         context.startActivity(intent);
     }
     @Override
@@ -35,7 +34,7 @@ public class DetailActivity extends AppCompatActivity implements HomeContract.Mv
         mBinding.tvDetailZhuce.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RegistActivity.start(DetailActivity.this);
+                RegistActivity.start(DetailUserActivity.this);
             }
         });
     }
@@ -47,8 +46,8 @@ public class DetailActivity extends AppCompatActivity implements HomeContract.Mv
             public void onClick(View v) {
                 myDetailName = mBinding.etMyDetailName.getText().toString();
                 myDetailPassword = mBinding.etMyDetailPassword.getText().toString();
-                progressDialog_login = ProgressDialog.show(DetailActivity.this,"","正在登录");
-                mPresenter.commitRegistDetail(DetailActivity.this,progressDialog_login,myDetailName,myDetailPassword);
+                progressDialog_login = ProgressDialog.show(DetailUserActivity.this,"","正在登录");
+                mPresenter.commitRegistDetail(DetailUserActivity.this,progressDialog_login,myDetailName,myDetailPassword);
             }
         });
     }

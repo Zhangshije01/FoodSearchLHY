@@ -30,7 +30,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="美食"
+                    android:text="自助餐"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="电影"
+                    android:text="火锅"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -70,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="酒店"
+                    android:text="小吃快餐"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -90,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="休闲娱乐"
+                    android:text="烧烤"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
@@ -117,7 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="外卖"
+                    android:text="面包甜点"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -137,7 +137,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="火锅"
+                    android:text="团购优惠"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -157,7 +157,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="丽人"
+                    android:text="预约订座"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -177,7 +177,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="周边游"
+                    android:text="精选美食"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>

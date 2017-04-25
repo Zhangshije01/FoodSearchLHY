@@ -30,6 +30,7 @@ import com.hwangjr.rxbus.Bus;
 import com.yang.foodsearch.R;
 import com.yang.foodsearch.activity.DetailBussinessActivity;
 import com.yang.foodsearch.adapter.SearchFoodAdapter;
+import com.yang.foodsearch.application.FoodSearchApplication;
 import com.yang.foodsearch.bean.BusinessBean;
 import com.yang.foodsearch.bean.DistrictBean;
 import com.yang.foodsearch.bean.FoodBean;
@@ -273,6 +274,7 @@ public class SearchFragment extends Fragment{
                     districtNames.add(district.getDistrict_name());
                 }
                 left.clear();
+                left.add("附近");
                 left.addAll(districtNames);
                 leftAdapter.notifyDataSetChanged();
 
@@ -320,9 +322,27 @@ public class SearchFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 right.clear();
-                List<String> neighborhoodNames = new ArrayList<String>(districts.get(position).getNeighborhoods());
-                neighborhoodNames.add(0, "全部"+districts.get(position).getDistrict_name());
-                right.addAll(neighborhoodNames);
+                Log.d(TAG, "onItemClick: "+position);
+                if(position == 0){
+                    List<String> listnear = new ArrayList<String>();
+                    listnear.add("附近（智能距离）");
+                    listnear.add("1千米");
+                    listnear.add("3千米");
+                    listnear.add("5千米");
+                    listnear.add("10千米");
+                    listnear.add("全城");
+                    //TODO  ??？
+                    listnear.add(" ");
+                    listnear.add(" ");
+                    listnear.add(" ");
+                    listnear.add(" ");
+                    listnear.add(" ");
+                    right.addAll(listnear);
+                }else{
+                    List<String> neighborhoodNames = new ArrayList<String>(districts.get(position).getNeighborhoods());
+                    neighborhoodNames.add(0, "全部"+districts.get(position).getDistrict_name());
+                    right.addAll(neighborhoodNames);
+                }
                 rightAdapter.notifyDataSetChanged();
             }
         });
@@ -339,17 +359,43 @@ public class SearchFragment extends Fragment{
                     neighborhoodName = neighborhoodName.substring(2);
                 }
                 tv_search_bar_fujin.setText(neighborhoodName);
-                //3)listView中显示用户点击的街道上所有的美食商户
-                HttpUtil.getFoods(city_name, 1 ,neighborhoodName, new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String arg0) {
-                        BusinessBean businessBean = new Gson().fromJson(arg0, BusinessBean.class);
-                        List<BusinessBean.Business> b = businessBean.getBusinesses();
-                        searchFoodAdapter.addAll(b, true);
+                if(neighborhoodName.contains("千米")|| neighborhoodName.contains("(智能距离)")||neighborhoodName.contains("全城")){
+                    String radius;
+                    if(position == 0 ){
+                        radius = String.valueOf(500);
+                    }else if(position == 1){
+                        radius = String.valueOf(1000);
+                    }else if(position == 2){
+                        radius = String.valueOf(3000);
+                    }else if(position == 3){
+                        radius = String.valueOf(5000);
+                    }else{
+                        return;
                     }
-                });
+                    Log.d(TAG, "onItemClick: "+radius);
 
+                    Log.d(TAG, "onItemClick: "+ FoodSearchApplication.getInstance().getLastpoint());
+
+                    HttpUtil.getMeishi(city_name, null, null, radius, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String s) {
+                            BusinessBean businessBean = new Gson().fromJson(s, BusinessBean.class);
+                            List<BusinessBean.Business> b = businessBean.getBusinesses();
+                            searchFoodAdapter.addAll(b, true);
+                        }
+                    });
+                }else{
+                    //3)listView中显示用户点击的街道上所有的美食商户
+                    HttpUtil.getFoods(city_name, 1 ,neighborhoodName, new Response.Listener<String>() {
+
+                        @Override
+                        public void onResponse(String arg0) {
+                            BusinessBean businessBean = new Gson().fromJson(arg0, BusinessBean.class);
+                            List<BusinessBean.Business> b = businessBean.getBusinesses();
+                            searchFoodAdapter.addAll(b, true);
+                        }
+                    });
+                }
             }
         });
     }
@@ -397,7 +443,7 @@ public class SearchFragment extends Fragment{
                 viewmeishi.setVisibility(View.INVISIBLE);
                 String category = adapter.getItem(position);
                 tv_search_bar_meishi.setText(category);
-                HttpUtil.getMeishi(city_name, category,null, new Response.Listener<String>() {
+                HttpUtil.getMeishi(city_name, category,null,null, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
                         BusinessBean businessBean = new Gson().fromJson(s, BusinessBean.class);
@@ -521,7 +567,11 @@ public class SearchFragment extends Fragment{
             if (data != null){
                 city_name = data.getStringExtra(CityPickerActivity.KEY_PICKED_CITY);
                 tv_location_city.setText(city_name);
+                tv_search_bar_fujin.setText("附近");
+                tv_search_bar_meishi.setText("美食");
                 loadData();
+                searchBarMeishi();
+                searchCityDistinct();
             }
         }
     }

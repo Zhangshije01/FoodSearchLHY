@@ -12,7 +12,7 @@
             android:id="@+id/tv_search_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="北京"
+            android:text="保定"
             android:layout_centerInParent="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="15dp"

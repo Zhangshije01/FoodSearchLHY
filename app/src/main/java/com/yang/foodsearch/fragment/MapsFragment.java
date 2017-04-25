@@ -186,7 +186,9 @@ public class MapsFragment extends Fragment {
                 address = "幸福大街";
             }
 
+            Log.d(TAG, "onReceiveLocation: 123"+lat+"---"+lng);
             loc = new LatLng(lat, lng);
+            Log.d(TAG, "onReceiveLocation: loc"+loc);
             FoodSearchApplication.getInstance().setLastpoint(loc);
 
             MarkerOptions opt = new MarkerOptions();
@@ -240,6 +242,7 @@ public class MapsFragment extends Fragment {
                     //Ω´√ø“ª∏ˆpoiµƒŒª÷√∂º◊˜Œ™“ª∏ˆ∏≤∏«ŒÔÃÌº”µΩµÿÕº…œ
                     MarkerOptions option = new MarkerOptions();
                     option.position(poi.location);
+
                     option.icon(BitmapDescriptorFactory.fromResource(R.mipmap.icon_locate));
                     Marker marker = (Marker) baiduMap.addOverlay(option);
                     Bundle bundle = new Bundle();

@@ -126,7 +126,7 @@ public class HttpUtil {
         queue.add(req);
     }
 
-    public static void getMeishi(String city,String category,String sort,Response.Listener<String> listener){
+    public static void getMeishi(String city,String category,String sort,String radius,Response.Listener<String> listener){
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("city", city);
@@ -135,6 +135,9 @@ public class HttpUtil {
         }
         if(!TextUtils.isEmpty(sort)){
             params.put("sort",sort);
+        }
+        if(!TextUtils.isEmpty(radius)){
+            params.put("radius",radius);
         }
 
         String url = "http://api.dianping.com/v1/business/find_businesses";

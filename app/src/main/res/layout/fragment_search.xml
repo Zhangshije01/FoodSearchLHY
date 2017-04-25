@@ -17,6 +17,8 @@
             <include
                 android:id="@+id/item_search_tab_near"
                 layout="@layout/item_search_tab_near"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:visibility="invisible"
                 />
             <include

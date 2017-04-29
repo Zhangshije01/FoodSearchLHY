@@ -18,6 +18,7 @@ import com.yang.foodsearch.bean.BusinessBean;
 import com.yang.foodsearch.util.HttpUtil;
 import com.yang.foodsearch.view.TextViewPlus;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
 
@@ -105,7 +106,8 @@ public class SearchFoodAdapter extends MyBaseAdapter<BusinessBean.Business>{
 
             //通过自己的工具类计算距离
             double distance = DistanceUtil.getDistance(latLng,FoodSearchApplication.getInstance().getLastpoint());
-            viewHolder.tv_search_food_address.setText(distance + "米");
+            DecimalFormat df = new DecimalFormat("#.00");
+            viewHolder.tv_search_food_address.setText(df.format(distance) + "米");
         }else{
             viewHolder.tv_search_food_address.setText("");
         }

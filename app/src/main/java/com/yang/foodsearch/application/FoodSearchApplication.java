@@ -19,6 +19,9 @@ public class FoodSearchApplication extends Application{
     public LatLng lastpoint;
     public String cityAddress;
     private boolean isFirstLogin = true;
+    private boolean isFujin;
+    private String location_info;
+    private String user_name;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -59,5 +62,29 @@ public class FoodSearchApplication extends Application{
 
     public boolean isFirstLogin() {
         return isFirstLogin;
+    }
+
+    public void setFujin(boolean fujin) {
+        isFujin = fujin;
+    }
+
+    public boolean isFujin() {
+        return isFujin;
+    }
+
+    public String getLocation_info() {
+        return location_info;
+    }
+
+    public void setLocation_info(String location_info) {
+        this.location_info = location_info;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 }

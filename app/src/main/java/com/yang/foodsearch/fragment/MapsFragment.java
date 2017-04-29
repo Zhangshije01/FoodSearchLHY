@@ -208,6 +208,8 @@ public class MapsFragment extends Fragment {
 
             TextView view = new TextView(getContext());
             view.setText(address.substring(2,address.length()));
+            FoodSearchApplication.getInstance().setLocation_info(address.substring(2,address.indexOf("区")+1));
+            Log.d(TAG, "onReceiveLocation: "+address.substring(2,address.indexOf("区")+1));
             view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             view.setTextColor(Color.BLUE);
             int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());

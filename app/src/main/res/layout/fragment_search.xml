@@ -25,14 +25,8 @@
                 android:id="@+id/item_search_tab_meishi"
                 layout="@layout/item_search_tab_meishi"
                 android:visibility="invisible"/>
-            <include
-                android:id="@+id/item_search_tab_paixu"
-                layout="@layout/item_search_tab_paixu"
-                android:visibility="invisible"/>
-            <include
-                android:id="@+id/item_search_tab_shaixuan"
-                layout="@layout/item_search_tab_shaixuan"
-                android:visibility="invisible"/>
+
+
         </FrameLayout>
 
 </layout>

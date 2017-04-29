@@ -1,7 +1,11 @@
 package com.yang.foodsearch.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,15 +13,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.yang.foodsearch.R;
 import com.yang.foodsearch.adapter.CommentAdapter;
+import com.yang.foodsearch.application.FoodSearchApplication;
 import com.yang.foodsearch.bean.BusinessBean;
 import com.yang.foodsearch.bean.Comment;
 import com.yang.foodsearch.util.HttpUtil;
+import com.yang.foodsearch.util.ToastUtils;
 
 
 import org.jsoup.Jsoup;
@@ -34,10 +41,11 @@ public class DetailBussinessActivity extends AppCompatActivity {
     private BusinessBean.Business business;
     private ListView listview;
     private static final String TAG = "DetailBussiness zsj";
+    private static final int PERMISSION_REQUEST_CODE = 128;
     private List<Comment> comments;
     private CommentAdapter adapter;
-
-    int[] stars ={R.mipmap.movie_star10,
+    private boolean isFujin;
+    int[] stars = {R.mipmap.movie_star10,
             R.mipmap.movie_star20,
             R.mipmap.movie_star30,
             R.mipmap.movie_star35,
@@ -50,25 +58,42 @@ public class DetailBussinessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_bussiness);
         business = (BusinessBean.Business) getIntent().getSerializableExtra("business");
-        Log.d(TAG, "onCreate: "+business.toString());
-        refresh();
+        Log.d(TAG, "onCreate: " + business.toString());
+        isFujin = FoodSearchApplication.getInstance().isFujin();
+        if(!isFujin){
+            refresh();
+        }
         initListView();
 
+        List<String> list_permission = new ArrayList<>();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if(checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+                list_permission.add(Manifest.permission.CALL_PHONE);
+            }
+
+            if(list_permission.size() >0){
+                requestPermissions(list_permission.toArray(new String[]{list_permission.get(list_permission.size()-1)}),PERMISSION_REQUEST_CODE);
+
+            }
+        }
+
     }
+
+
+
     private void initListView() {
         listview = (ListView) findViewById(R.id.listview_detail_business);
-        comments= new ArrayList<Comment>();
+        comments = new ArrayList<Comment>();
         adapter = new CommentAdapter(this, comments);
         LayoutInflater inflater = getLayoutInflater();
 
 
-        View headerView1 = inflater.inflate(R.layout.item_business_layout,listview,false);
+        View headerView1 = inflater.inflate(R.layout.item_business_layout, listview, false);
         listview.addHeaderView(headerView1);
         initHeaderView1(headerView1);
-        View headerView2 = inflater.inflate(R.layout.header_list_detail_info,listview,false);
+        View headerView2 = inflater.inflate(R.layout.header_list_detail_info, listview, false);
         listview.addHeaderView(headerView2);
         initHeaderView2(headerView2);
-
 
         listview.setAdapter(adapter);
     }
@@ -79,13 +104,16 @@ public class DetailBussinessActivity extends AppCompatActivity {
         ImageView ivPicture = (ImageView) view.findViewById(R.id.iv_item_business_picture);
         ImageView ivRating = (ImageView) view.findViewById(R.id.iv_item_business_rating);
         TextView tvName = (TextView) view.findViewById(R.id.tv_item_business_name);
-        TextView tvPrice = (TextView)view.findViewById(R.id.tv_item_business_price);
+        TextView tvPrice = (TextView) view.findViewById(R.id.tv_item_business_price);
         TextView tvInfo = (TextView) view.findViewById(R.id.tv_item_business_info);
         TextView tvDistance = (TextView) view.findViewById(R.id.tv_item_business_distance);
 
         //显示商家图片
-        HttpUtil.displayImage(business.getS_photo_url(), ivPicture);
-
+        if (isFujin){
+            ivPicture.setImageResource(R.mipmap.bucket_no_picture);
+        }else{
+            HttpUtil.displayImage(business.getS_photo_url(), ivPicture);
+        }
         //显示打分图片
         int idx = new Random().nextInt(7);
         ivRating.setImageResource(stars[idx]);
@@ -93,38 +121,44 @@ public class DetailBussinessActivity extends AppCompatActivity {
         //商家名称
         String name = business.getName();
         //去掉商家名称后面的“这是一条测试数据....”
-        name = name.substring(0,name.indexOf("("));
+        name = name.substring(0, name.indexOf("("));
         //添加上分店名称
-        if(!TextUtils.isEmpty(business.getBranch_name())){
-            name = name+"("+business.getBranch_name()+")";
+
+        if (!TextUtils.isEmpty(business.getBranch_name())) {
+            name = name + "(" + business.getBranch_name() + ")";
         }
         tvName.setText(name);
 
         //人均价格
-        tvPrice.setText("￥"+(new Random().nextInt(101)+50)+"元/人");
+        tvPrice.setText("￥" + (new Random().nextInt(101) + 50) + "元/人");
 
-        //商户的信息（包括地段和菜系）
-        StringBuilder sb = new StringBuilder();
-        //拼接商户的地段信息
-        for(int i=0;i<business.getRegions().size();i++){
-            if(i==0){
-                sb.append(business.getRegions().get(i));
-            }else{
-                sb.append("/").append(business.getRegions().get(i));
+        if(!isFujin){
+            //商户的信息（包括地段和菜系）
+            StringBuilder sb = new StringBuilder();
+            //拼接商户的地段信息
+            for (int i = 0; i < business.getRegions().size(); i++) {
+                if (i == 0) {
+                    sb.append(business.getRegions().get(i));
+                } else {
+                    sb.append("/").append(business.getRegions().get(i));
+                }
             }
+
+            sb.append(" ");
+            //拼接商户的菜系信息
+            for (int i = 0; i < business.getCategories().size(); i++) {
+                if (i == 0) {
+                    sb.append(business.getCategories().get(i));
+                } else {
+                    sb.append("/").append(business.getCategories().get(i));
+                }
+            }
+
+            tvInfo.setText(sb.toString());
+        }else{
+            tvInfo.setText("");
         }
 
-        sb.append(" ");
-        //拼接商户的菜系信息
-        for(int i=0;i<business.getCategories().size();i++){
-            if(i==0){
-                sb.append(business.getCategories().get(i));
-            }else{
-                sb.append("/").append(business.getCategories().get(i));
-            }
-        }
-
-        tvInfo.setText(sb.toString());
 
         tvDistance.setText("");
 
@@ -136,6 +170,25 @@ public class DetailBussinessActivity extends AppCompatActivity {
         tvAddress.setText(business.getAddress());
 
         tvPhone.setText(business.getTelephone());
+
+        LinearLayout ll_detail_address = (LinearLayout) view.findViewById(R.id.ll_detail_bussiness_address);
+        ll_detail_address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailBussinessActivity.this,DetailMapActivity.class);
+                intent.putExtra("business", business);
+                startActivity(intent);
+            }
+        });
+
+        LinearLayout ll_detail_phone = (LinearLayout) view.findViewById(R.id.ll_detail_bussiness_phone);
+        ll_detail_phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+business.getTelephone()));
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -147,7 +200,7 @@ public class DetailBussinessActivity extends AppCompatActivity {
     private void refresh() {
 
         String url = business.getReview_list_url();
-        Log.d(TAG, "refresh: "+url);
+        Log.d(TAG, "refresh: " + url);
         HttpUtil.getComments(url, new Response.Listener<String>() {
 
             @Override
@@ -159,7 +212,7 @@ public class DetailBussinessActivity extends AppCompatActivity {
 
                 Elements elements = document.select(".comment-list ul li[data-id]");
 
-                for(Element element:elements){
+                for (Element element : elements) {
                     Comment comment = new Comment();
                     //从element中取出相应的内容作为comment的属性值
                     //取网友的用户名、头像
@@ -180,11 +233,11 @@ public class DetailBussinessActivity extends AppCompatActivity {
 
                     //选取人均消费价格
                     Elements spans = element.select(".comm-per");
-                    if(spans!=null && spans.size()>0){
+                    if (spans != null && spans.size() > 0) {
                         //提供了人均价格
                         String avgPrice = spans.get(0).text();//人均 ￥90
                         comment.setAvgPrice(avgPrice.split(" ")[1]);//￥90
-                    }else{
+                    } else {
                         //评论中未提供人均消费价格
                         comment.setAvgPrice("");
                     }
@@ -192,20 +245,20 @@ public class DetailBussinessActivity extends AppCompatActivity {
                     //选取评论的配图
                     Elements imgs = element.select(".shop-photo img");
 
-                    if(imgs!=null && imgs.size()>0){
+                    if (imgs != null && imgs.size() > 0) {
                         //评论中有配图
                         int num = imgs.size();
-                        if(num>3){
+                        if (num > 3) {
                             //配图多于3张，最多就取3张
                             num = 3;
                         }
                         String[] pics = new String[num];
-                        for(int i=0;i<num;i++){
+                        for (int i = 0; i < num; i++) {
                             Element img = imgs.get(i);
                             pics[i] = img.attr("src");
                         }
                         comment.setImgs(pics);
-                    }else{
+                    } else {
                         //评论中没有配图
                         comment.setImgs(null);
                     }
@@ -217,6 +270,19 @@ public class DetailBussinessActivity extends AppCompatActivity {
 
             }
         });
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case PERMISSION_REQUEST_CODE:
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    ToastUtils.showToast("已经申请了权限");
+                }else{
+                    ToastUtils.showToast("没有权限");
+                }
+                break;
+        }
     }
 
 

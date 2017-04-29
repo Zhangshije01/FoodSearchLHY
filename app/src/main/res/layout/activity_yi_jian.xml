@@ -23,13 +23,14 @@
             android:layout_width="match_parent"
             android:id="@+id/et_my_yijian"
             android:textSize="14sp"
-            android:textColor="@color/color_background_gggg"
+            android:textColor="@color/color_black_text_user"
             android:gravity="start"
             android:padding="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
             android:textColorHint="#cccccc"
             android:hint="我来说两句"
+
             android:maxLines="10"/>
 
         <TextView

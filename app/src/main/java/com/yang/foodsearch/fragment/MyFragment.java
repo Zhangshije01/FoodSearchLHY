@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import com.yang.foodsearch.activity.DetailUserActivity;
 import com.yang.foodsearch.activity.YiJianActivity;
 import com.yang.foodsearch.application.FoodSearchApplication;
 import com.yang.foodsearch.databinding.FragmentMyBinding;
+import com.yang.foodsearch.util.ToastUtils;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +27,8 @@ import com.yang.foodsearch.databinding.FragmentMyBinding;
 public class MyFragment extends Fragment {
     FragmentMyBinding myBinding;
     private boolean isFirstLogin;
+    private String TAG = "myfragment zsj";
+
     public MyFragment() {
     }
     @Override
@@ -61,5 +66,23 @@ public class MyFragment extends Fragment {
                 startActivity(new Intent(getContext(), AboutActivity.class));
             }
         });
+
+        myBinding.llMyFragmentDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtils.showToast("升级中");
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: "+FoodSearchApplication.getInstance().getUser_name());
+        if (FoodSearchApplication.getInstance().getUser_name() != null){
+            myBinding.tvMyName.setText(FoodSearchApplication.getInstance().getUser_name());
+        }
     }
 }

@@ -9,7 +9,7 @@
     <ImageView
         android:layout_height="72dp"
         android:layout_width="72dp"
-        android:src="@mipmap/ic_launcher"
+        android:src="@mipmap/iv_foodsearch"
         android:layout_centerHorizontal="true"
         android:id="@+id/logo_view"/>
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 
 import com.android.volley.Response;
 import com.google.gson.Gson;
@@ -28,6 +29,7 @@ public class AZiZhuCanActivity extends AppCompatActivity {
     private String city_name;
     private String category;
     private static final String TAG = "zizhucan zsj";
+    private ImageView iv_search_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +48,17 @@ public class AZiZhuCanActivity extends AppCompatActivity {
                 BusinessBean.Business business = null;
                 business = searchFoodAdapter.getItem(position);
                 Log.d(TAG, "onItemClick: "+business.toString());
-                Intent intent = new Intent(AZiZhuCanActivity.this,DetailMapActivity.class);
+                Intent intent = new Intent(AZiZhuCanActivity.this,DetailBussinessActivity.class);
                 intent.putExtra("business", business);
                 startActivity(intent);
+            }
+        });
+
+        iv_search_back = (ImageView) mBinding.includeAZizhu.findViewById(R.id.iv_search_header_back);
+        iv_search_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -57,7 +67,7 @@ public class AZiZhuCanActivity extends AppCompatActivity {
     public void getZiZhuCan(){
         countNum = 1;
 
-        HttpUtil.getMeishi(city_name, category, null, null, 40, new Response.Listener<String>() {
+        HttpUtil.getMeishi(city_name, null,category, null,null, 40, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 BusinessBean businessBean = new Gson().fromJson(s,BusinessBean.class);

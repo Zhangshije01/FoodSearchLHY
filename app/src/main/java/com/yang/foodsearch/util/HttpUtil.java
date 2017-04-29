@@ -126,13 +126,32 @@ public class HttpUtil {
         queue.add(req);
     }
 
-    public static void getMeishi(String city,String category,String sort,String radius,int limit,Response.Listener<String> listener){
+    public static void getFoodsbyMeishi(String city,int page,String region,String category,Response.Listener<String> listener){
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("city", city);
+        params.put("category", category);
+        params.put("limit","10");
+        params.put("page",String.valueOf(page));
+        if(!TextUtils.isEmpty(region)){
+            params.put("region", region);
+        }
+        String url = "http://api.dianping.com/v1/business/find_businesses";
+        StringRequest req = new StringRequest(getUrl(url , params ), listener, null);
+        queue.add(req);
+    }
+
+
+    public static void getMeishi(String city,String region,String category,String sort,String radius,int limit,Response.Listener<String> listener){
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("city", city);
         params.put("limit",String.valueOf(limit));
         if(!TextUtils.isEmpty(category)){
             params.put("category", category);
+        }
+        if(!TextUtils.isEmpty(region)){
+            params.put("region", region);
         }
         if(!TextUtils.isEmpty(sort)){
             params.put("sort",sort);
@@ -160,10 +179,11 @@ public class HttpUtil {
         queue.add(req);
     }
 
-    public static void getCityFood(String city, Response.Listener<String> listener){
+    public static void getCityFood(String city,Response.Listener<String> listener){
 
         Map<String,String> params = new HashMap<>();
         params.put("city",city);
+
         StringRequest request = new StringRequest(getUrl("http://api.dianping.com/v1/metadata/get_categories_with_businesses",params),listener,null);
         queue.add(request);
 

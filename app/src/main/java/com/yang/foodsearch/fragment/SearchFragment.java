@@ -1,6 +1,7 @@
 package com.yang.foodsearch.fragment;
 
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
@@ -36,12 +37,15 @@ import com.baidu.mapapi.search.poi.PoiDetailResult;
 import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.google.gson.Gson;
 import com.yang.foodsearch.R;
 import com.yang.foodsearch.activity.AZiZhuCanActivity;
 import com.yang.foodsearch.activity.DetailBussinessActivity;
+import com.yang.foodsearch.activity.WebFoodActivity;
 import com.yang.foodsearch.adapter.SearchFoodAdapter;
 import com.yang.foodsearch.application.FoodSearchApplication;
+import com.yang.foodsearch.application.FoodSearchUtil;
 import com.yang.foodsearch.bean.BusinessBean;
 import com.yang.foodsearch.bean.DistrictBean;
 import com.yang.foodsearch.bean.FoodBean;
@@ -51,11 +55,14 @@ import com.yang.foodsearch.databinding.ItemSearchOneBinding;
 import com.yang.foodsearch.databinding.ItemSearchTabBinding;
 import com.yang.foodsearch.databinding.ItemSearchTwoBinding;
 import com.yang.foodsearch.util.HttpUtil;
+import com.yang.foodsearch.util.ToastUtils;
 import com.yang.foodsearch.view.MeiTuanListView;
 import com.zaaach.citypicker.CityPickerActivity;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -64,7 +71,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SearchFragment extends Fragment{
+public class SearchFragment extends Fragment {
 
 
     FragmentSearchBinding mBinding;
@@ -88,6 +95,9 @@ public class SearchFragment extends Fragment{
     private LinearLayout ll_search_cafeiting;
     private LinearLayout ll_search_xican;
     private LinearLayout ll_search_hanguoliaoli;
+
+    private LinearLayout ll_search_food_webview_morning;
+    private LinearLayout ll_search_food_webview_formate;
 
 
     private ImageView iv_search_city;
@@ -125,11 +135,15 @@ public class SearchFragment extends Fragment{
      * 避免内存泄露
      */
     private InterHandler mInterHandler = new InterHandler(this);
+    private boolean isFujin;
+
     private static class InterHandler extends Handler {
         private WeakReference<SearchFragment> mActivity;
-        public InterHandler(SearchFragment activity){
+
+        public InterHandler(SearchFragment activity) {
             mActivity = new WeakReference<SearchFragment>(activity);
         }
+
         @Override
         public void handleMessage(Message msg) {
             SearchFragment activity = mActivity.get();
@@ -141,11 +155,12 @@ public class SearchFragment extends Fragment{
                         activity.mListView.setSelection(0);
                         break;
                 }
-            }else{
+            } else {
                 super.handleMessage(msg);
             }
         }
     }
+
     public SearchFragment() {
         // Required empty public constructor
     }
@@ -160,7 +175,7 @@ public class SearchFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_search,container,false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false);
         return mBinding.getRoot();
     }
 
@@ -170,17 +185,37 @@ public class SearchFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
         mListView = mBinding.searchList;
 
-        View view_header_icon = getActivity().getLayoutInflater().inflate(R.layout.item_search_header_icon,mListView,false);
+        View view_header_icon = getActivity().getLayoutInflater().inflate(R.layout.item_search_header_icon, mListView, false);
         mListView.addHeaderView(view_header_icon);
 
-        View view_item_search_one = getActivity().getLayoutInflater().inflate(R.layout.item_search_one,mListView,false);
+        View view_item_search_one = getActivity().getLayoutInflater().inflate(R.layout.item_search_one, mListView, false);
         mListView.addHeaderView(view_item_search_one);
 
 
-        View view_item_search_two = getActivity().getLayoutInflater().inflate(R.layout.item_search_two,mListView,false);
+        View view_item_search_two = getActivity().getLayoutInflater().inflate(R.layout.item_search_two, mListView, false);
         mListView.addHeaderView(view_item_search_two);
 
-        View view_item_search_tab = getActivity().getLayoutInflater().inflate(R.layout.item_search_tab,mListView,false);
+        ll_search_food_webview_morning = (LinearLayout) view_item_search_two.findViewById(R.id.ll_search_webview_morning);
+        ll_search_food_webview_morning.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), WebFoodActivity.class);
+                intent.putExtra("type", "morning");
+                startActivity(intent);
+            }
+        });
+
+        ll_search_food_webview_formate = (LinearLayout) view_item_search_two.findViewById(R.id.ll_search_webview_format);
+        ll_search_food_webview_formate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), WebFoodActivity.class);
+                intent.putExtra("type", "format");
+                startActivity(intent);
+            }
+        });
+
+        View view_item_search_tab = getActivity().getLayoutInflater().inflate(R.layout.item_search_tab, mListView, false);
         mListView.addHeaderView(view_item_search_tab);
 
         ll_search_food = (LinearLayout) view_item_search_one.findViewById(R.id.ll_icons_list_food);
@@ -189,8 +224,8 @@ public class SearchFragment extends Fragment{
             public void onClick(View v) {
                 Log.d(TAG, "onClick: llsearchfood");
                 Intent intent = new Intent(getContext(), AZiZhuCanActivity.class);
-                intent.putExtra("city_name",city_name);
-                intent.putExtra("category","自助餐");
+                intent.putExtra("city_name", city_name);
+                intent.putExtra("category", "自助餐");
 
                 startActivity(intent);
             }
@@ -209,8 +244,8 @@ public class SearchFragment extends Fragment{
             public void onClick(View v) {
                 Log.d(TAG, "onClick: llsearchfood");
                 Intent intent = new Intent(getContext(), AZiZhuCanActivity.class);
-                intent.putExtra("city_name",city_name);
-                intent.putExtra("category","火锅");
+                intent.putExtra("city_name", city_name);
+                intent.putExtra("category", "火锅");
                 startActivity(intent);
             }
         });
@@ -220,8 +255,8 @@ public class SearchFragment extends Fragment{
             public void onClick(View v) {
                 Log.d(TAG, "onClick: llsearchfood");
                 Intent intent = new Intent(getContext(), AZiZhuCanActivity.class);
-                intent.putExtra("city_name",city_name);
-                intent.putExtra("category","小吃快餐");
+                intent.putExtra("city_name", city_name);
+                intent.putExtra("category", "小吃快餐");
 
                 startActivity(intent);
             }
@@ -232,8 +267,8 @@ public class SearchFragment extends Fragment{
             public void onClick(View v) {
                 Log.d(TAG, "onClick: llsearchfood");
                 Intent intent = new Intent(getContext(), AZiZhuCanActivity.class);
-                intent.putExtra("city_name",city_name);
-                intent.putExtra("category","烧烤");
+                intent.putExtra("city_name", city_name);
+                intent.putExtra("category", "烧烤");
 
                 startActivity(intent);
             }
@@ -244,8 +279,8 @@ public class SearchFragment extends Fragment{
             public void onClick(View v) {
                 Log.d(TAG, "onClick: llsearchfood");
                 Intent intent = new Intent(getContext(), AZiZhuCanActivity.class);
-                intent.putExtra("city_name",city_name);
-                intent.putExtra("category","面包甜点");
+                intent.putExtra("city_name", city_name);
+                intent.putExtra("category", "面包甜点");
 
                 startActivity(intent);
             }
@@ -256,8 +291,8 @@ public class SearchFragment extends Fragment{
             public void onClick(View v) {
                 Log.d(TAG, "onClick: llsearchfood");
                 Intent intent = new Intent(getContext(), AZiZhuCanActivity.class);
-                intent.putExtra("city_name",city_name);
-                intent.putExtra("category","咖啡厅");
+                intent.putExtra("city_name", city_name);
+                intent.putExtra("category", "咖啡厅");
 
                 startActivity(intent);
             }
@@ -268,8 +303,8 @@ public class SearchFragment extends Fragment{
             public void onClick(View v) {
                 Log.d(TAG, "onClick: llsearchfood");
                 Intent intent = new Intent(getContext(), AZiZhuCanActivity.class);
-                intent.putExtra("city_name",city_name);
-                intent.putExtra("category","西餐");
+                intent.putExtra("city_name", city_name);
+                intent.putExtra("category", "西餐");
 
                 startActivity(intent);
             }
@@ -280,14 +315,12 @@ public class SearchFragment extends Fragment{
             public void onClick(View v) {
                 Log.d(TAG, "onClick: llsearchfood");
                 Intent intent = new Intent(getContext(), AZiZhuCanActivity.class);
-                intent.putExtra("city_name",city_name);
-                intent.putExtra("category","韩国料理");
+                intent.putExtra("city_name", city_name);
+                intent.putExtra("category", "韩国料理");
 
                 startActivity(intent);
             }
         });
-
-
 
 
         iv_search_city = (ImageView) view_header_icon.findViewById(R.id.iv_header_main_location);
@@ -300,20 +333,19 @@ public class SearchFragment extends Fragment{
             }
         });
 
-        tv_location_city  = (TextView) view_header_icon.findViewById(R.id.tv_header_main_city);
+        tv_location_city = (TextView) view_header_icon.findViewById(R.id.tv_header_main_city);
 //        city_name = tv_location_city.getText().toString();
-        Log.d(TAG, "onViewCreated: "+FoodSearchApplication.getInstance().getCityAddress());
-        if(FoodSearchApplication.getInstance().getCityAddress() != null){
+        Log.d(TAG, "onViewCreated: " + FoodSearchApplication.getInstance().getCityAddress());
+        if (FoodSearchApplication.getInstance().getCityAddress() != null) {
             city_name = FoodSearchApplication.getInstance().getCityAddress();
-            city_name = city_name.substring(0,city_name.length()-1);
-        }else{
+            city_name = city_name.substring(0, city_name.length() - 1);
+        } else {
             city_name = "北京";
         }
         tv_location_city.setText(city_name);
 
 
-
-        searchFoodAdapter = new SearchFoodAdapter(getContext(),businessList);
+        searchFoodAdapter = new SearchFoodAdapter(getContext(), businessList);
         mListView.setAdapter(searchFoodAdapter);
 
         loadData();
@@ -331,14 +363,14 @@ public class SearchFragment extends Fragment{
 //                    }
 //                });
 
-                HttpUtil.getMeishi(city_name, edit_search, null, null, 20, new Response.Listener<String>() {
+                HttpUtil.getMeishi(city_name, null,edit_search, null, null, 20, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
-                        BusinessBean businessBean = new Gson().fromJson(s,BusinessBean.class);
+                        BusinessBean businessBean = new Gson().fromJson(s, BusinessBean.class);
                         businessList = businessBean.getBusinesses();
-                        Log.d(TAG, "onResponse: "+businessList.get(0).toString());
-                        Log.d(TAG, "onResponse: "+businessList.size());
-                        searchFoodAdapter.addAll(businessList,true);
+                        Log.d(TAG, "onResponse: " + businessList.get(0).toString());
+                        Log.d(TAG, "onResponse: " + businessList.size());
+                        searchFoodAdapter.addAll(businessList, true);
                     }
                 });
             }
@@ -352,7 +384,7 @@ public class SearchFragment extends Fragment{
                         try {
                             Thread.sleep(3000);
                             countNum += 1;
-                            Log.d(TAG, "run: "+countNum);
+                            Log.d(TAG, "run: " + countNum);
                             loadMoreData(countNum);
                             mInterHandler.sendEmptyMessage(REFRESH_COMPLETE);
                         } catch (InterruptedException e) {
@@ -387,31 +419,46 @@ public class SearchFragment extends Fragment{
         tv_search_bar_paixu = (TextView) view_item_search_tab.findViewById(R.id.tv_tab_business_bar_paixu);
         tv_search_bar_shaixuan = (TextView) view_item_search_tab.findViewById(R.id.tv_tab_business_bar_shaixuan);
 
-        searchBarFujin();
 
-        initmeishi();
+        searchBarFujin();
         searchBarMeishi();
-        searchBarPaixu();
-        searchBarShaixuan();
+        tv_search_bar_paixu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: " + "fujin");
+                searchBarPaixu();
+            }
+        });
+        tv_search_bar_shaixuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchBarShaixuan();
+
+            }
+        });
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "onItemClick: "+position);
-                if(position > 4){
+                Log.d(TAG, "onItemClick: " + position);
+                if (position > 4) {
+//                    if(isFujin){
+//                        ToastUtils.showToast("详细信息敬请期待");
+//                    }else{
                     BusinessBean.Business business = null;
-                    business = searchFoodAdapter.getItem(position-5);
-                    Log.d(TAG, "onItemClick: "+business.toString());
-                    Intent intent = new Intent(getContext(),DetailBussinessActivity.class);
+                    business = searchFoodAdapter.getItem(position - 5);
+                    Log.d(TAG, "onItemClick: " + business.toString());
+                    Intent intent = new Intent(getContext(), DetailBussinessActivity.class);
                     intent.putExtra("business", business);
                     startActivity(intent);
+//                    }
                 }
             }
         });
     }
 
-    public void searchCityDistinct(){
+    public void searchCityDistinct() {
         HttpUtil.getDistricts(city_name, new Response.Listener<String>() {
 
             @Override
@@ -421,7 +468,7 @@ public class SearchFragment extends Fragment{
                 districts = cityName.getDistricts();
 
                 List<String> districtNames = new ArrayList<String>();
-                for(DistrictBean.City.District district:districts){
+                for (DistrictBean.City.District district : districts) {
                     districtNames.add(district.getDistrict_name());
                 }
                 left.clear();
@@ -430,7 +477,7 @@ public class SearchFragment extends Fragment{
                 leftAdapter.notifyDataSetChanged();
 
                 List<String> neighborhoodNames = new ArrayList<String>(districts.get(0).getNeighborhoods());
-                neighborhoodNames.add(0, "全部"+districts.get(0).getDistrict_name());
+                neighborhoodNames.add(0, "全部" + districts.get(0).getDistrict_name());
 
                 right.clear();
                 right.addAll(neighborhoodNames);
@@ -440,20 +487,21 @@ public class SearchFragment extends Fragment{
         });
     }
 
-    public void searchBarFujin(){
+    public void searchBarFujin() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final AlertDialog dialog = builder.create();
+        viewFujin = View.inflate(getContext(),R.layout.item_search_tab_near,null);
+        dialog.setView(viewFujin);
+        dialog.setCancelable(true);
         tv_search_bar_fujin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: "+"fujin");
-                if (viewFujin.getVisibility() == View.INVISIBLE){
-                    viewFujin.setVisibility(View.VISIBLE);
-                }else{
-                    viewFujin.setVisibility(View.INVISIBLE);
-                }
+                Log.d(TAG, "onClick: " + "fujin");
+                dialog.show();
             }
         });
 
-        viewFujin = mBinding.getRoot().findViewById(R.id.item_search_tab_near);
         listViewLeft = (ListView) viewFujin.findViewById(R.id.lv_business_select_left);
         listViewRight = (ListView) viewFujin.findViewById(R.id.lv_business_select_right);
 
@@ -461,11 +509,11 @@ public class SearchFragment extends Fragment{
         listViewRight.setBackgroundColor(Color.parseColor("#FFCC66"));
 
         left = new ArrayList<String>();
-        leftAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,left);
+        leftAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, left);
         listViewLeft.setAdapter(leftAdapter);
 
         right = new ArrayList<String>();
-        rightAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,right);
+        rightAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, right);
         listViewRight.setAdapter(rightAdapter);
 
         listViewLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -473,25 +521,25 @@ public class SearchFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 right.clear();
-                Log.d(TAG, "onItemClick: "+position);
-                if(position == 0){
+                Log.d(TAG, "onItemClick: " + position);
+                if (position == 0) {
                     List<String> listnear = new ArrayList<String>();
                     listnear.add("附近（智能距离）");
                     listnear.add("500米");
                     listnear.add("1千米");
                     listnear.add("2千米");
                     listnear.add("3千米");
-                    listnear.add("全城");
-                    //TODO  ??？
-                    listnear.add(" ");
-                    listnear.add(" ");
-                    listnear.add(" ");
-                    listnear.add(" ");
-                    listnear.add(" ");
+//                    listnear.add("全城");
+//                    //TODO  ??？
+//                    listnear.add(" ");
+//                    listnear.add(" ");
+//                    listnear.add(" ");
+//                    listnear.add(" ");
+//                    listnear.add(" ");
                     right.addAll(listnear);
-                }else{
-                    List<String> neighborhoodNames = new ArrayList<String>(districts.get(position).getNeighborhoods());
-                    neighborhoodNames.add(0, "全部"+districts.get(position).getDistrict_name());
+                } else {
+                    List<String> neighborhoodNames = new ArrayList<String>(districts.get(position - 1).getNeighborhoods());
+                    neighborhoodNames.add(0, "全部" + districts.get(position - 1).getDistrict_name());
                     right.addAll(neighborhoodNames);
                 }
                 rightAdapter.notifyDataSetChanged();
@@ -503,47 +551,47 @@ public class SearchFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 //1)districtContainer消失
-                viewFujin.setVisibility(View.INVISIBLE);
+                dialog.dismiss();
+                isFujin = true;
+                FoodSearchApplication.getInstance().setFujin(true);
                 //2)tvBtn1的内容变为用户点击的街道名称
                 String neighborhoodName = rightAdapter.getItem(position);
-                if(position==0){
-                    neighborhoodName = neighborhoodName.substring(2);
-                }
+
                 tv_search_bar_fujin.setText(neighborhoodName);
-                if(neighborhoodName.contains("米")|| neighborhoodName.contains("(智能距离)")||neighborhoodName.contains("全城")){
+                if (neighborhoodName.contains("米") || neighborhoodName.contains("附近") || neighborhoodName.contains("全城")) {
                     int radius;
                     int pagNum;
-                    if(position == 0 ){
-                        radius = 1500;
+                    if (position == 0) {
+                        radius = 1000;
                         pagNum = 1;
-                    }else if(position == 1){
+                    } else if (position == 1) {
                         radius = 500;
                         pagNum = 2;
-                    }else if(position == 2){
+                    } else if (position == 2) {
                         radius = 1000;
                         pagNum = 3;
-                    }else if(position == 3){
+                    } else if (position == 3) {
                         radius = 2000;
                         pagNum = 4;
-                    }else if(position == 4){
+                    } else if (position == 4) {
                         radius = 3000;
                         pagNum = 3;
-                    }else{
+                    } else {
                         radius = 1000;
                         pagNum = 4;
                     }
-                    Log.d(TAG, "onItemClick: "+radius);
+                    Log.d(TAG, "onItemClick: " + radius);
 
-                    Log.d(TAG, "onItemClick: "+ FoodSearchApplication.getInstance().getLastpoint());
+                    Log.d(TAG, "onItemClick: " + FoodSearchApplication.getInstance().getLastpoint());
 
                     LatLng loc = FoodSearchApplication.getInstance().getLastpoint();
-                    Log.d(TAG, "initSearchFood: "+loc);
+                    Log.d(TAG, "initSearchFood: " + loc);
                     PoiSearch poiSearch = PoiSearch.newInstance();
                     poiSearch.setOnGetPoiSearchResultListener(new OnGetPoiSearchResultListener() {
 
                         @Override
                         public void onGetPoiResult(PoiResult arg0) {
-                            if(arg0==null||arg0.error!= SearchResult.ERRORNO.NO_ERROR){
+                            if (arg0 == null || arg0.error != SearchResult.ERRORNO.NO_ERROR) {
 
                                 Toast.makeText(getContext(), "meishi", Toast.LENGTH_SHORT).show();
                                 return;
@@ -552,23 +600,44 @@ public class SearchFragment extends Fragment{
                             List<PoiInfo> pois = arg0.getAllPoi();
                             List<BusinessBean.Business> buslist = new ArrayList<BusinessBean.Business>();
                             BusinessBean.Business business;
-                            for(PoiInfo poi:pois){
-                                Log.d(TAG, "onGetPoiResult: poi"+poi.address);
-                                Log.d(TAG, "onGetPoiResult: poi"+poi.name);
-                                Log.d(TAG, "onGetPoiResult: poi"+poi.phoneNum);
-                                Log.d(TAG, "onGetPoiResult: poi"+poi.location);
+                            for (PoiInfo poi : pois) {
+                                Log.d(TAG, "onGetPoiResult: poi" + poi.address);
+                                Log.d(TAG, "onGetPoiResult: poi" + poi.name);
+                                Log.d(TAG, "onGetPoiResult: poi" + poi.phoneNum);
+                                Log.d(TAG, "onGetPoiResult: poi" + poi.location);
                                 Log.d(TAG, "onGetPoiResult: poi---------------");
 
+
                                 business = new BusinessBean.Business();
-                                business.setPhoto_url("http://qcloud.dpfile.com/pc/DuQK4dx9T9l8V9fufwvvynTQBi_i91ThdkChZxvXRdOrExPQva5D6SeX-3VIXlNYTYGVDmosZWTLal1WbWRW3A.jpg");
+                                business.setPhoto_url(FoodSearchUtil.food_url);
                                 business.setAddress(poi.address);
-                                business.setName(poi.name+"(");
+                                business.setName(poi.name + "(");
+                                business.setTelephone(poi.phoneNum);
                                 business.setLatitude(poi.location.latitude);
                                 business.setLongitude(poi.location.longitude);
                                 buslist.add(business);
                             }
+
+                            Collections.sort(buslist, new Comparator<BusinessBean.Business>() {
+                                @Override
+                                public int compare(BusinessBean.Business o1, BusinessBean.Business o2) {
+                                    double lat1 = o1.getLatitude();
+                                    double lng1 = o1.getLongitude();
+                                    LatLng latLng_o1 = new LatLng(lat1,lng1);
+                                    double distance_o1 = DistanceUtil.getDistance(latLng_o1,FoodSearchApplication.getInstance().getLastpoint());
+
+                                    double lat2 = o2.getLatitude();
+                                    double lng2 = o2.getLongitude();
+                                    LatLng latLng_o2 = new LatLng(lat2,lng2);
+                                    double distance_o2 = DistanceUtil.getDistance(latLng_o2,FoodSearchApplication.getInstance().getLastpoint());
+                                    Log.d(TAG, "compare: "+distance_o1+"  "+distance_o2);
+                                    return (int)(distance_o1-distance_o2);
+                                }
+                            });
+
                             searchFoodAdapter.addAll(buslist, true);
                         }
+
                         @Override
                         public void onGetPoiDetailResult(PoiDetailResult arg0) {
                             // TODO Auto-generated method stub
@@ -581,14 +650,21 @@ public class SearchFragment extends Fragment{
                     options.radius(radius);
 
                     options.pageCapacity(20);
+                    Log.d(TAG, "onItemClick: " + radius);
                     options.pageNum(pagNum);
                     //À—À˜µƒƒ⁄»›
                     options.keyword("美食");
                     poiSearch.searchNearby(options);//∑¢∆–À»§µ„À—À˜
 
-                }else{
+                } else {
                     //3)listView中显示用户点击的街道上所有的美食商户
-                    HttpUtil.getFoods(city_name, 1 ,neighborhoodName, new Response.Listener<String>() {
+                    isFujin = false;
+                    if(neighborhoodName.contains("全部")){
+                        neighborhoodName = neighborhoodName.substring(2,neighborhoodName.length());
+                    }
+                    String category_meishi = tv_search_bar_meishi.getText().toString();
+                    FoodSearchApplication.getInstance().setFujin(false);
+                    HttpUtil.getFoodsbyMeishi(city_name, 1, neighborhoodName, category_meishi,new Response.Listener<String>() {
 
                         @Override
                         public void onResponse(String arg0) {
@@ -602,37 +678,41 @@ public class SearchFragment extends Fragment{
         });
     }
 
-    public void initmeishi(){
-        viewmeishi = mBinding.getRoot().findViewById(R.id.item_search_tab_meishi);
+
+
+    public void searchBarMeishi() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final AlertDialog dialog = builder.create();
+        viewmeishi = View.inflate(getContext(),R.layout.item_search_tab_meishi,null);
+
+        dialog.setCancelable(true);
+        dialog.setView(viewmeishi);
+
         listview_meishi = (ListView) viewmeishi.findViewById(R.id.listview_item_meishi);
-        adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,list_meishi);
+        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list_meishi);
         listview_meishi.setAdapter(adapter);
-    }
-    public void searchBarMeishi(){
         tv_search_bar_meishi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: "+"fujin");
-                if (viewmeishi.getVisibility() == View.INVISIBLE){
-                    viewmeishi.setVisibility(View.VISIBLE);
-                }else{
-                    viewmeishi.setVisibility(View.INVISIBLE);
-                }
+                dialog.show();
+
             }
         });
 
-        HttpUtil.getCityFood(city_name, new Response.Listener<String>() {
+
+        HttpUtil.getCityFood(city_name,new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                FoodBean foodbean = new Gson().fromJson(s,FoodBean.class);
+                FoodBean foodbean = new Gson().fromJson(s, FoodBean.class);
                 FoodBean.Categories categories = foodbean.getCategories().get(0);
                 List<FoodBean.Categories.Subcategories> subs = categories.getSubcategories();
-                
+
                 List<String> cityfoodname = new ArrayList<String>();
-                for (FoodBean.Categories.Subcategories s1:subs) {
+                for (FoodBean.Categories.Subcategories s1 : subs) {
                     cityfoodname.add(s1.getCategory_name());
                 }
                 list_meishi.clear();
+                list_meishi.add("美食");
                 list_meishi.addAll(cityfoodname);
                 adapter.notifyDataSetChanged();
 
@@ -642,10 +722,20 @@ public class SearchFragment extends Fragment{
         listview_meishi.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                viewmeishi.setVisibility(View.INVISIBLE);
+                dialog.dismiss();
                 String category = adapter.getItem(position);
+                String region_fujin = tv_search_bar_fujin.getText().toString();
+                if(region_fujin.contains("附近")||category.contains("米")){
+                    region_fujin = FoodSearchApplication.getInstance().getLocation_info();
+                }
+                if(region_fujin.contains("全部")){
+                    region_fujin = region_fujin.substring(2,region_fujin.length());
+
+                }
+
+                Log.d(TAG, "onItemClick: region_fujin"+region_fujin);
                 tv_search_bar_meishi.setText(category);
-                HttpUtil.getMeishi(city_name, category,null,null,40, new Response.Listener<String>() {
+                HttpUtil.getMeishi(city_name,region_fujin, category,null, null, 40, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
                         BusinessBean businessBean = new Gson().fromJson(s, BusinessBean.class);
@@ -657,22 +747,16 @@ public class SearchFragment extends Fragment{
         });
     }
 
-    public void searchBarPaixu(){
-        viewpaixu = mBinding.getRoot().findViewById(R.id.item_search_tab_paixu);
-        tv_search_bar_paixu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: "+"fujin");
-                if (viewpaixu.getVisibility() == View.INVISIBLE){
-                    viewpaixu.setVisibility(View.VISIBLE);
-                }else{
-                    viewpaixu.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
+    public void searchBarPaixu() {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
+        final AlertDialog dialog = alertBuilder.create();
+        viewpaixu = View.inflate(getContext(), R.layout.item_search_tab_paixu, null);
+        dialog.setView(viewpaixu);
+        dialog.setCancelable(true);
+        dialog.show();
 
         List<String> list_paixu = new ArrayList<>();
-        final ArrayAdapter<String> adapter_paixu = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,list_paixu);
+        final ArrayAdapter<String> adapter_paixu = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list_paixu);
         ListView listview_paixu = (ListView) viewpaixu.findViewById(R.id.listview_item_paixu);
         listview_paixu.setAdapter(adapter_paixu);
 
@@ -690,10 +774,10 @@ public class SearchFragment extends Fragment{
         listview_paixu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                viewpaixu.setVisibility(View.INVISIBLE);
-                int sort = new Random().nextInt(5)+1;
+                dialog.dismiss();
+                int sort = new Random().nextInt(4) + 1;
                 tv_search_bar_paixu.setText(adapter_paixu.getItem(position));
-                HttpUtil.getFoods(city_name,sort,null, new Response.Listener<String>() {
+                HttpUtil.getFoods(city_name, sort, null, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
                         BusinessBean businessBean = new Gson().fromJson(s, BusinessBean.class);
@@ -705,27 +789,21 @@ public class SearchFragment extends Fragment{
         });
 
 
-
     }
 
-    public void searchBarShaixuan(){
-        viewshaixuan = mBinding.getRoot().findViewById(R.id.item_search_tab_shaixuan);
-        tv_search_bar_shaixuan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (viewshaixuan.getVisibility() == View.INVISIBLE){
-                    viewshaixuan.setVisibility(View.VISIBLE);
-                }else{
-                    viewshaixuan.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
+    public void searchBarShaixuan() {
+        AlertDialog.Builder alertDialogBulider = new AlertDialog.Builder(getContext());
+        final AlertDialog alertDialog = alertDialogBulider.create();
+        viewshaixuan = View.inflate(getContext(), R.layout.item_search_tab_shaixuan, null);
+        alertDialog.setView(viewshaixuan);
+        alertDialog.setCancelable(true);
+        alertDialog.show();
 
         Button button_queding = (Button) viewshaixuan.findViewById(R.id.bt_search_shaixuan_queding);
         button_queding.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewshaixuan.setVisibility(View.INVISIBLE);
+                alertDialog.dismiss();
                 HttpUtil.getFoods(city_name, new Random().nextInt(5) + 1, null, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
@@ -736,38 +814,51 @@ public class SearchFragment extends Fragment{
                 });
             }
         });
+
+        Button button_quxiao = (Button) viewshaixuan.findViewById(R.id.bt_search_shaixuan_quxiao);
+        button_quxiao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+
+
     }
-    public void loadData(){
+
+    public void loadData() {
         countNum = 1;
-        Log.d(TAG, "loadData: "+city_name);
+        Log.d(TAG, "loadData: " + city_name);
         HttpUtil.getFoods(city_name, countNum, null, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                BusinessBean businessBean = new Gson().fromJson(s,BusinessBean.class);
+                BusinessBean businessBean = new Gson().fromJson(s, BusinessBean.class);
                 businessList = businessBean.getBusinesses();
-                Log.d(TAG, "onResponse: "+businessList.get(0).toString());
-                Log.d(TAG, "onResponse: "+businessList.size());
-                searchFoodAdapter.addAll(businessList,true);
+                Log.d(TAG, "onResponse: " + businessList.get(0).toString());
+                Log.d(TAG, "onResponse: " + businessList.size());
+                searchFoodAdapter.addAll(businessList, true);
             }
         });
     }
-    public void loadMoreData(int count){
+
+    public void loadMoreData(int count) {
         HttpUtil.getFoods(city_name, count, null, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                BusinessBean businessBean = new Gson().fromJson(s,BusinessBean.class);
+                BusinessBean businessBean = new Gson().fromJson(s, BusinessBean.class);
                 businessList = businessBean.getBusinesses();
-                Log.d(TAG, "onResponse: "+businessList.get(0).toString());
-                Log.d(TAG, "onResponse: "+businessList.size());
-                searchFoodAdapter.addAll(businessList,false);
+                Log.d(TAG, "onResponse: " + businessList.get(0).toString());
+                Log.d(TAG, "onResponse: " + businessList.size());
+                searchFoodAdapter.addAll(businessList, false);
             }
         });
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_PICK_CITY && resultCode == RESULT_OK){
-            if (data != null){
+        if (requestCode == REQUEST_CODE_PICK_CITY && resultCode == RESULT_OK) {
+            if (data != null) {
                 city_name = data.getStringExtra(CityPickerActivity.KEY_PICKED_CITY);
                 tv_location_city.setText(city_name);
                 tv_search_bar_fujin.setText("附近");

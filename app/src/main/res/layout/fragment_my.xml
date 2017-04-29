@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
-                android:text="羊羊羊洋洋阳"/>
+                android:text="未登录"/>
             <ImageView
                 android:id="@+id/iv_my_detail"
                 android:layout_width="wrap_content"
@@ -56,6 +56,7 @@
             />
 
         <LinearLayout
+            android:id="@+id/ll_my_fragment_detail"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:orientation="horizontal"
@@ -63,25 +64,28 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:gravity="center_horizontal"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center_horizontal"
                 android:orientation="vertical">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="2"
-                    android:src="@mipmap/ic_nav_rate_us"/>
+                    android:src="@mipmap/ic_nav_rate_us" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="卡券"/>
+                    android:text="卡券" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="0张"/>
+                    android:text="0张" />
             </LinearLayout>
 
             <LinearLayout
@@ -181,7 +185,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="v1.0.1"
+                android:text="V 1.0.1"
                 android:textSize="@dimen/text_size_bigger"
                 android:layout_marginRight="10dp"/>
         </LinearLayout>

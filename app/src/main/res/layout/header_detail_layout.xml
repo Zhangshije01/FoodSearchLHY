@@ -37,6 +37,7 @@
         android:src="@mipmap/ic_action_share_normal" />
 
     <ImageView
+        android:id="@+id/iv_search_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

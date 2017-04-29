@@ -120,7 +120,7 @@ public class RegistActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess() {
                                         ToastUtils.showToast("保存成功");
-                                        FoodSearchApplication.getInstance().setFirstLogin(false);
+
                                         finish();
                                     }
 

@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.yang.foodsearch.application.FoodSearchApplication;
 import com.yang.foodsearch.bean.User;
 import com.yang.foodsearch.mvp.contract.HomeContract;
 import com.yang.foodsearch.util.ToastUtils;
@@ -71,21 +72,24 @@ public class HomePresenter implements HomeContract.Presenter {
                     if(pwd.equals(userPassword)){
                         //密码一致，登录成功
                         //跳转界面
-                        User user=arg0.get(0);
-//                        user.setInstallationId(BmobInstallation.getInstallationId(LoginnActivity.this));
-                        user.update(context, new UpdateListener() {
+                        FoodSearchApplication.getInstance().setFirstLogin(false);
+                        progressDialog.dismiss();
 
-                            @Override
-                            public void onSuccess() {
-                                // TODO Auto-generated method stub
-                                progressDialog.dismiss();
-                            }
-                            @Override
-                            public void onFailure(int arg0, String arg1) {
-                                // TODO Auto-generated method stub
-                                ToastUtils.showToast("更新设备ID失败");
-                            }
-                        });
+//                        User user=arg0.get(0);
+////                        user.setInstallationId(BmobInstallation.getInstallationId(LoginnActivity.this));
+//                        user.update(context, new UpdateListener() {
+//
+//                            @Override
+//                            public void onSuccess() {
+//                                // TODO Auto-generated method stub
+//                                progressDialog.dismiss();
+//                            }
+//                            @Override
+//                            public void onFailure(int arg0, String arg1) {
+//                                // TODO Auto-generated method stub
+//                                ToastUtils.showToast("更新设备ID失败");
+//                            }
+//                        });
 
                     }else{
                         ToastUtils.showToast("用户名或密码错误");

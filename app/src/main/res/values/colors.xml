@@ -6,7 +6,7 @@
 
     <color name="common_white">#FFFFFF</color>
     <color name="color_orange_start">#FF8000</color>
-    <color name="color_orange_end">#FFBB77</color>
+    <color name="color_orange_end">#FFCC66</color>
 
     <!--text color -->
     <color name="color_black_text_user">#ff000000</color>

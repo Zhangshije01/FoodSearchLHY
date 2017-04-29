@@ -138,6 +138,7 @@ public class DetailBussinessActivity extends AppCompatActivity {
         tvPhone.setText(business.getTelephone());
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();

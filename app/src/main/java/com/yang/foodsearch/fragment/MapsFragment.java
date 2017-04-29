@@ -94,6 +94,7 @@ public class MapsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 initSearchFood();
+
             }
         });
     }
@@ -176,15 +177,21 @@ public class MapsFragment extends Fragment {
             double lng = -1;
             Log.d(TAG, "onReceiveLocation: "+code);
 
+            String cityAddress;
             if(code==61||code==66||code==161){
                 lat = location.getLatitude();
                 lng = location.getLongitude();
                 address = location.getAddrStr();
+                Log.d(TAG, "onReceiveLocation: "+location.getCity());
+                cityAddress = location.getCity();
             }else{
                 lat = 39.876402;
                 lng = 116.465049;
-                address = "幸福大街";
+                address = "河北大学工商学院";
+                cityAddress = "保定";
             }
+
+            FoodSearchApplication.getInstance().setCityAddress(cityAddress);
 
             Log.d(TAG, "onReceiveLocation: 123"+lat+"---"+lng);
             loc = new LatLng(lat, lng);
@@ -200,7 +207,7 @@ public class MapsFragment extends Fragment {
             baiduMap.animateMapStatus(msu);
 
             TextView view = new TextView(getContext());
-            view.setText(address);
+            view.setText(address.substring(2,address.length()));
             view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             view.setTextColor(Color.BLUE);
             int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
@@ -271,6 +278,7 @@ public class MapsFragment extends Fragment {
         options.location(loc);
         //À—À˜µƒ∞Îæ∂(µ•Œª£∫√◊)
         options.radius(3000);
+//        options.pageCapacity(30);
         //À—À˜µƒƒ⁄»›
         options.keyword("美食");
         poiSearch.searchNearby(options);//∑¢∆–À»§µ„À—À˜

@@ -26,4 +26,5 @@
     <string name="font_regular">GTWalsheim_Regular.otf</string>
     <string name="font_medium">GTWalsheim_Medium.otf</string>
     <string name="font_bold">GTWalsheim_Bold.otf</string>
+    <string name="title_activity_amian_bao">AMianBaoActivity</string>
 </resources>

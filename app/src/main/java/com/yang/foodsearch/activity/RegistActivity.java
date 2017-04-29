@@ -14,6 +14,7 @@ import android.view.View;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.yang.foodsearch.R;
+import com.yang.foodsearch.application.FoodSearchApplication;
 import com.yang.foodsearch.bean.User;
 import com.yang.foodsearch.databinding.ActivityRegistBinding;
 import com.yang.foodsearch.util.ToastUtils;
@@ -119,6 +120,7 @@ public class RegistActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess() {
                                         ToastUtils.showToast("保存成功");
+                                        FoodSearchApplication.getInstance().setFirstLogin(false);
                                         finish();
                                     }
 

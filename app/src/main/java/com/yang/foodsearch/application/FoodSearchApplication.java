@@ -17,6 +17,8 @@ public class FoodSearchApplication extends Application{
     private static FoodSearchApplication mInstance;
     private Handler mHandler;
     public LatLng lastpoint;
+    public String cityAddress;
+    private boolean isFirstLogin = true;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -41,5 +43,21 @@ public class FoodSearchApplication extends Application{
     }
     public Handler getUIHandler(){
         return mHandler;
+    }
+
+    public String getCityAddress() {
+        return cityAddress;
+    }
+
+    public void setCityAddress(String cityAddress) {
+        this.cityAddress = cityAddress;
+    }
+
+    public void setFirstLogin(boolean firstLogin) {
+        isFirstLogin = firstLogin;
+    }
+
+    public boolean isFirstLogin() {
+        return isFirstLogin;
     }
 }

@@ -1,6 +1,7 @@
 package com.yang.foodsearch.fragment;
 
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,7 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yang.foodsearch.R;
+import com.yang.foodsearch.activity.AboutActivity;
+import com.yang.foodsearch.activity.DeatilActivity;
 import com.yang.foodsearch.activity.DetailUserActivity;
+import com.yang.foodsearch.activity.YiJianActivity;
+import com.yang.foodsearch.application.FoodSearchApplication;
 import com.yang.foodsearch.databinding.FragmentMyBinding;
 
 /**
@@ -18,6 +23,7 @@ import com.yang.foodsearch.databinding.FragmentMyBinding;
  */
 public class MyFragment extends Fragment {
     FragmentMyBinding myBinding;
+    private boolean isFirstLogin;
     public MyFragment() {
     }
     @Override
@@ -33,7 +39,26 @@ public class MyFragment extends Fragment {
         myBinding.llMyDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DetailUserActivity.start(getContext());
+                isFirstLogin = FoodSearchApplication.getInstance().isFirstLogin();
+                if(isFirstLogin){
+                    DetailUserActivity.start(getContext());
+                }else{
+                    DeatilActivity.start(getContext());
+                }
+            }
+        });
+
+        myBinding.llMyYijian.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), YiJianActivity.class));
+            }
+        });
+
+        myBinding.llMyAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), AboutActivity.class));
             }
         });
     }

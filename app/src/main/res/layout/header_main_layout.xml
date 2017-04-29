@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:background="#ffff6633"
+
     android:orientation="horizontal" >
 
     <LinearLayout
@@ -10,7 +10,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal" >
-
         <TextView
             android:id="@+id/tv_header_main_city"
             android:layout_width="wrap_content"
@@ -19,15 +18,9 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="北京"
-            android:textColor="#ffffffff"
+            android:textColor="#ffff6633"
             android:textSize="16sp" />
 
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:contentDescription="@null"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/title_home_arrow_down_selector" />
     </LinearLayout>
 
     <LinearLayout
@@ -37,7 +30,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_weight="1"
-        android:background="@drawable/screen_skip" >
+        android:background="@mipmap/screen_skip" >
 
         <ImageView
             android:layout_width="15dp"
@@ -45,7 +38,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:src="@drawable/navibar_icon_search" />
+            android:src="@mipmap/navibar_icon_search" />
 
         <TextView
             android:layout_width="0dp"
@@ -63,6 +56,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginRight="5dp"
-        android:src="@drawable/home_navibar_icon_add" />
+        android:src="@mipmap/icon_locate" />
 
 </LinearLayout>

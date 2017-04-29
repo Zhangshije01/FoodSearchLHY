@@ -116,7 +116,7 @@ public class HttpUtil {
         Map<String, String> params = new HashMap<String, String>();
         params.put("city", city);
         params.put("category", "美食");
-        params.put("limit","5");
+        params.put("limit","10");
         params.put("page",String.valueOf(page));
         if(!TextUtils.isEmpty(region)){
             params.put("region", region);
@@ -126,10 +126,11 @@ public class HttpUtil {
         queue.add(req);
     }
 
-    public static void getMeishi(String city,String category,String sort,String radius,Response.Listener<String> listener){
+    public static void getMeishi(String city,String category,String sort,String radius,int limit,Response.Listener<String> listener){
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("city", city);
+        params.put("limit",String.valueOf(limit));
         if(!TextUtils.isEmpty(category)){
             params.put("category", category);
         }

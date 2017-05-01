@@ -725,8 +725,10 @@ public class SearchFragment extends Fragment {
                 dialog.dismiss();
                 String category = adapter.getItem(position);
                 String region_fujin = tv_search_bar_fujin.getText().toString();
-                if(region_fujin.contains("附近")||category.contains("米")){
+                Log.d(TAG, "onItemClick: fujin -- "+region_fujin);
+                if(region_fujin.contains("附近")||region_fujin.contains("米")){
                     region_fujin = FoodSearchApplication.getInstance().getLocation_info();
+                    region_fujin = region_fujin.substring(region_fujin.indexOf("市")+1,region_fujin.length());
                 }
                 if(region_fujin.contains("全部")){
                     region_fujin = region_fujin.substring(2,region_fujin.length());

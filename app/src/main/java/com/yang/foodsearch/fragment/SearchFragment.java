@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
+import com.baidu.mapapi.search.poi.PoiIndoorResult;
 import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
@@ -130,6 +132,7 @@ public class SearchFragment extends Fragment {
     ListView listview_meishi;
     final List<String> list_meishi = new ArrayList<>();
     ArrayAdapter<String> adapter;
+
     /**
      * mInterHandler是一个私有静态内部类继承自Handler，内部持有MainActivity的弱引用，
      * 避免内存泄露
@@ -184,6 +187,7 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mListView = mBinding.searchList;
+
 
         View view_header_icon = getActivity().getLayoutInflater().inflate(R.layout.item_search_header_icon, mListView, false);
         mListView.addHeaderView(view_header_icon);
@@ -552,6 +556,7 @@ public class SearchFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 //1)districtContainer消失
                 dialog.dismiss();
+
                 isFujin = true;
                 FoodSearchApplication.getInstance().setFujin(true);
                 //2)tvBtn1的内容变为用户点击的街道名称
@@ -559,6 +564,7 @@ public class SearchFragment extends Fragment {
 
                 tv_search_bar_fujin.setText(neighborhoodName);
                 if (neighborhoodName.contains("米") || neighborhoodName.contains("附近") || neighborhoodName.contains("全城")) {
+//                    mBinding.pbSearch.setVisibility(View.VISIBLE);
                     int radius;
                     int pagNum;
                     if (position == 0) {
@@ -569,13 +575,13 @@ public class SearchFragment extends Fragment {
                         pagNum = 2;
                     } else if (position == 2) {
                         radius = 1000;
-                        pagNum = 3;
+                        pagNum = 8;
                     } else if (position == 3) {
                         radius = 2000;
-                        pagNum = 4;
+                        pagNum = 10;
                     } else if (position == 4) {
                         radius = 3000;
-                        pagNum = 3;
+                        pagNum = 15;
                     } else {
                         radius = 1000;
                         pagNum = 4;
@@ -642,6 +648,11 @@ public class SearchFragment extends Fragment {
                         public void onGetPoiDetailResult(PoiDetailResult arg0) {
                             // TODO Auto-generated method stub
                         }
+
+                        @Override
+                        public void onGetPoiIndoorResult(PoiIndoorResult poiIndoorResult) {
+
+                        }
                     });
                     PoiNearbySearchOption options = new PoiNearbySearchOption();
                     //À—À˜µƒ÷––ƒµ„
@@ -655,6 +666,9 @@ public class SearchFragment extends Fragment {
                     //À—À˜µƒƒ⁄»›
                     options.keyword("美食");
                     poiSearch.searchNearby(options);//∑¢∆–À»§µ„À—À˜
+
+//                    mBinding.pbSearch.setVisibility(View.INVISIBLE);
+
 
                 } else {
                     //3)listView中显示用户点击的街道上所有的美食商户

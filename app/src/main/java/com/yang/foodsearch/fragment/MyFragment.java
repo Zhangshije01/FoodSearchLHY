@@ -45,11 +45,12 @@ public class MyFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 isFirstLogin = FoodSearchApplication.getInstance().isFirstLogin();
-                if(isFirstLogin){
-                    DetailUserActivity.start(getContext());
-                }else{
-                    DeatilActivity.start(getContext());
-                }
+                Log.d(TAG, "onClick: "+isFirstLogin);
+//                if(isFirstLogin){
+                    startActivity(new Intent(getContext(),DetailUserActivity.class));
+//                }else{
+//                    startActivity(new Intent(getContext(),DeatilActivity.class));
+//                }
             }
         });
 

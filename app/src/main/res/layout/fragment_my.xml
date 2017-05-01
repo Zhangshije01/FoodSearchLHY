@@ -162,7 +162,7 @@
             android:background="@color/common_white"
             />
         <LinearLayout
-
+            android:id="@+id/ll_my_version"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"

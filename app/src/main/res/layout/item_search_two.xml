@@ -34,7 +34,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="第一单免费"
+                    android:text="早餐大对比"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -51,7 +51,7 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingTop="3dp"
-                        android:text="领新客礼包"
+                        android:text="营养更健康"
                         android:textColor="#ffff7975"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -84,7 +84,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="名店优惠"
+                    android:text="美食推荐"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -101,7 +101,7 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingTop="3dp"
-                        android:text="优质餐厅精选"
+                        android:text="优质精选"
                         android:textColor="#ff3e95e5"
                         android:textSize="12sp" />
                 </LinearLayout>

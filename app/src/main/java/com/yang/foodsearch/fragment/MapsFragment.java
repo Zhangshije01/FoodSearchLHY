@@ -34,6 +34,7 @@ import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
+import com.baidu.mapapi.search.poi.PoiIndoorResult;
 import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
@@ -64,6 +65,7 @@ public class MapsFragment extends Fragment {
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -77,18 +79,10 @@ public class MapsFragment extends Fragment {
         mLocationClient = new LocationClient(getContext());
         //声明LocationClient类
         mLocationClient.registerLocationListener( myListener );
-        if (checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            //申请权限
-            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.ACCESS_FINE_LOCATION},
-                    ACCESS_COARSE_LOCATION_REQUEST_CODE);
-        }else {
-            initLocation();
-            initBaiduMap();
-        }
+
+        initLocation();
+        initBaiduMap();
+
 
         mBinding.btSearchMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,38 +93,49 @@ public class MapsFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == ACCESS_COARSE_LOCATION_REQUEST_CODE){
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission Granted
-                initLocation();
-                initBaiduMap();
-                initSearchFood();
-            } else {
-                Toast.makeText(getContext(), "访问被拒绝！", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
     private void initLocation(){
         LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy
-        );//ø…—°£¨ƒ¨»œ∏ﬂæ´∂»£¨…Ë÷√∂®Œªƒ£ Ω£¨∏ﬂæ´∂»£¨µÕπ¶∫ƒ£¨Ωˆ…Ë±∏
-        option.setCoorType("bd09ll");//ø…—°£¨ƒ¨»œgcj02£¨…Ë÷√∑µªÿµƒ∂®ŒªΩ·π˚◊¯±Íœµ
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+        //可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
+
+        option.setCoorType("bd09ll");
+        //可选，默认gcj02，设置返回的定位结果坐标系
+
         int span=1000;
-        option.setScanSpan(span);//ø…—°£¨ƒ¨»œ0£¨º¥Ωˆ∂®Œª“ª¥Œ£¨…Ë÷√∑¢∆∂®Œª«Î«Ûµƒº‰∏Ù–Ë“™¥Û”⁄µ»”⁄1000ms≤≈ «”––ßµƒ
-        option.setIsNeedAddress(true);//ø…—°£¨…Ë÷√ «∑Ò–Ë“™µÿ÷∑–≈œ¢£¨ƒ¨»œ≤ª–Ë“™
-        option.setOpenGps(true);//ø…—°£¨ƒ¨»œfalse,…Ë÷√ «∑Ò π”√gps
-        option.setLocationNotify(true);//ø…—°£¨ƒ¨»œfalse£¨…Ë÷√ «∑Òµ±GPS”––ß ±∞¥’’1S/1¥Œ∆µ¬  ‰≥ˆGPSΩ·π˚
-        option.setIsNeedLocationDescribe(true);//ø…—°£¨ƒ¨»œfalse£¨…Ë÷√ «∑Ò–Ë“™Œª÷√”Ô“ÂªØΩ·π˚£¨ø…“‘‘⁄BDLocation.getLocationDescribe¿Ôµ√µΩ£¨Ω·π˚¿‡À∆”⁄°∞‘⁄±±æ©ÃÏ∞≤√≈∏ΩΩ¸°±
-        option.setIsNeedLocationPoiList(true);//ø…—°£¨ƒ¨»œfalse£¨…Ë÷√ «∑Ò–Ë“™POIΩ·π˚£¨ø…“‘‘⁄BDLocation.getPoiList¿Ôµ√µΩ
-        option.setIgnoreKillProcess(false);//ø…—°£¨ƒ¨»œtrue£¨∂®ŒªSDKƒ⁄≤ø «“ª∏ˆSERVICE£¨≤¢∑≈µΩ¡À∂¿¡¢Ω¯≥Ã£¨…Ë÷√ «∑Ò‘⁄stopµƒ ±∫Ú…±À¿’‚∏ˆΩ¯≥Ã£¨ƒ¨»œ≤ª…±À¿
-        option.SetIgnoreCacheException(false);//ø…—°£¨ƒ¨»œfalse£¨…Ë÷√ «∑Ò ’ºØCRASH–≈œ¢£¨ƒ¨»œ ’ºØ
-        option.setEnableSimulateGps(false);//ø…—°£¨ƒ¨»œfalse£¨…Ë÷√ «∑Ò–Ë“™π˝¬ÀGPS∑¬’ÊΩ·π˚£¨ƒ¨»œ–Ë“™
+//        option.setScanSpan(span);
+        //可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
+
+        option.setIsNeedAddress(true);
+        //可选，设置是否需要地址信息，默认不需要
+
+        option.setOpenGps(true);
+        //可选，默认false,设置是否使用gps
+
+        option.setLocationNotify(true);
+        //可选，默认false，设置是否当GPS有效时按照1S/1次频率输出GPS结果
+
+        option.setIsNeedLocationDescribe(true);
+        //可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
+
+        option.setIsNeedLocationPoiList(true);
+        //可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
+
+        option.setIgnoreKillProcess(false);
+        //可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
+
+        option.SetIgnoreCacheException(false);
+        //可选，默认false，设置是否收集CRASH信息，默认收集
+
+        option.setEnableSimulateGps(false);
+        //可选，默认false，设置是否需要过滤GPS仿真结果，默认需要
+
         mLocationClient.setLocOption(option);
-        mLocationClient.start();
+        Log.d(TAG, "initLocation: "+mLocationClient.isStarted());
+        if(!mLocationClient.isStarted()){
+            Log.d(TAG, "initLocation: "+mLocationClient.isStarted());
+            mLocationClient.start();
+        }
     }
 
     private void initBaiduMap() {
@@ -206,25 +211,30 @@ public class MapsFragment extends Fragment {
             MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(loc);
             baiduMap.animateMapStatus(msu);
 
-            TextView view = new TextView(getContext());
-            view.setText(address.substring(2,address.length()));
-            FoodSearchApplication.getInstance().setLocation_info(address.substring(2,address.indexOf("区")+1));
-            Log.d(TAG, "onReceiveLocation: "+address.substring(2,address.indexOf("区")+1));
-            view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-            view.setTextColor(Color.BLUE);
-            int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
-            view.setPadding(padding,padding,padding,padding);
-            view.setBackgroundColor(Color.GRAY);
+//            TextView view = new TextView(getContext());
+//            view.setText(address.substring(2,address.length()));
+//            FoodSearchApplication.getInstance().setLocation_info(address.substring(2,address.indexOf("区")+1));
+//            Log.d(TAG, "onReceiveLocation: "+address.substring(2,address.indexOf("区")+1));
+//            view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+//            view.setTextColor(Color.BLUE);
+//            int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
+//            view.setPadding(padding,padding,padding,padding);
+//            view.setBackgroundColor(Color.GRAY);
+//
+//            InfoWindow infoWindow = new InfoWindow(view , loc, -120);
+//            baiduMap.showInfoWindow(infoWindow );
 
-            InfoWindow infoWindow = new InfoWindow(view , loc, -120);
-            baiduMap.showInfoWindow(infoWindow );
-
-            //Õ£÷πºÃ–¯∑¢∆∂®Œª«Î«Û
+            Log.d(TAG, "onReceiveLocation: --"+mLocationClient.isStarted());
             if(mLocationClient.isStarted()){
                 mLocationClient.unRegisterLocationListener(myListener);
                 mLocationClient.stop();
             }
+            Log.d(TAG, "onReceiveLocation: =="+mLocationClient.isStarted());
 
+        }
+
+        @Override
+        public void onConnectHotSpotMessage(String s, int i) {
 
         }
     }
@@ -273,6 +283,11 @@ public class MapsFragment extends Fragment {
                 // TODO Auto-generated method stub
 
             }
+
+            @Override
+            public void onGetPoiIndoorResult(PoiIndoorResult poiIndoorResult) {
+
+            }
         });
 
         PoiNearbySearchOption options = new PoiNearbySearchOption();
@@ -290,6 +305,7 @@ public class MapsFragment extends Fragment {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mBinding.bmapView.onDestroy();
+        mLocationClient.stop();
     }
     @Override
     public void onResume() {

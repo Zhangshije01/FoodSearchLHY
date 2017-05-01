@@ -12,17 +12,25 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.baidu.mapapi.bikenavi.BikeNavigateHelper;
+import com.baidu.mapapi.bikenavi.adapter.IBEngineInitListener;
+import com.baidu.mapapi.bikenavi.adapter.IBRoutePlanListener;
+import com.baidu.mapapi.bikenavi.model.BikeRoutePlanError;
+import com.baidu.mapapi.bikenavi.params.BikeNaviLauchParam;
+import com.baidu.mapapi.model.LatLng;
 import com.yang.foodsearch.R;
 import com.yang.foodsearch.adapter.CommentAdapter;
 import com.yang.foodsearch.application.FoodSearchApplication;
 import com.yang.foodsearch.bean.BusinessBean;
 import com.yang.foodsearch.bean.Comment;
+import com.yang.foodsearch.location.BNaviGuideActivity;
 import com.yang.foodsearch.util.HttpUtil;
 import com.yang.foodsearch.util.ToastUtils;
 
@@ -38,10 +46,14 @@ import java.util.Random;
 
 public class DetailBussinessActivity extends AppCompatActivity {
 
+    private BikeNavigateHelper mNaviHelper;
+    BikeNaviLauchParam param;
+    private static boolean isPermissionRequested = false;
+
     private BusinessBean.Business business;
     private ListView listview;
     private static final String TAG = "DetailBussiness zsj";
-    private static final int PERMISSION_REQUEST_CODE = 128;
+
     private List<Comment> comments;
     private CommentAdapter adapter;
     private boolean isFujin;
@@ -65,17 +77,23 @@ public class DetailBussinessActivity extends AppCompatActivity {
         }
         initListView();
 
-        List<String> list_permission = new ArrayList<>();
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if(checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
-                list_permission.add(Manifest.permission.CALL_PHONE);
-            }
+        requestPermission();
 
-            if(list_permission.size() >0){
-                requestPermissions(list_permission.toArray(new String[]{list_permission.get(list_permission.size()-1)}),PERMISSION_REQUEST_CODE);
+        mNaviHelper = BikeNavigateHelper.getInstance();
 
+        LatLng startPt = FoodSearchApplication.getInstance().getLastpoint();
+        LatLng endPt = new LatLng(business.getLatitude(), business.getLongitude());
+        Log.d(TAG, "onCreate: "+startPt+"--"+endPt);
+
+        param = new BikeNaviLauchParam().stPt(startPt).endPt(endPt);
+
+        ImageView iv_detail_bussiness_back = (ImageView) findViewById(R.id.iv_search_header_back);
+        iv_detail_bussiness_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
-        }
+        });
 
     }
 
@@ -172,12 +190,11 @@ public class DetailBussinessActivity extends AppCompatActivity {
         tvPhone.setText(business.getTelephone());
 
         LinearLayout ll_detail_address = (LinearLayout) view.findViewById(R.id.ll_detail_bussiness_address);
+
         ll_detail_address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DetailBussinessActivity.this,DetailMapActivity.class);
-                intent.putExtra("business", business);
-                startActivity(intent);
+                startBikeNavi();
             }
         });
 
@@ -271,17 +288,67 @@ public class DetailBussinessActivity extends AppCompatActivity {
             }
         });
     }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-            case PERMISSION_REQUEST_CODE:
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    ToastUtils.showToast("已经申请了权限");
-                }else{
-                    ToastUtils.showToast("没有权限");
-                }
-                break;
+
+
+    private void startBikeNavi() {
+        Log.d("View", "startBikeNavi");
+        mNaviHelper.initNaviEngine(this, new IBEngineInitListener() {
+            @Override
+            public void engineInitSuccess() {
+                Log.d("View", "engineInitSuccess");
+                routePlanWithParam();
+            }
+
+            @Override
+            public void engineInitFail() {
+                Log.d("View", "engineInitFail");
+            }
+        });
+    }
+
+    private void routePlanWithParam() {
+        mNaviHelper.routePlanWithParams(param, new IBRoutePlanListener() {
+            @Override
+            public void onRoutePlanStart() {
+                Log.d("View", "onRoutePlanStart");
+            }
+
+            @Override
+            public void onRoutePlanSuccess() {
+                Log.d("View", "onRoutePlanSuccess");
+                Intent intent = new Intent();
+                intent.setClass(DetailBussinessActivity.this, BNaviGuideActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onRoutePlanFail(BikeRoutePlanError error) {
+                Log.d("View", "onRoutePlanFail");
+            }
+
+        });
+    }
+
+
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= 23 && !isPermissionRequested) {
+
+            isPermissionRequested = true;
+
+            ArrayList<String> permissions = new ArrayList<>();
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            }
+            if(checkSelfPermission(Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED){
+                permissions.add(Manifest.permission.CALL_PHONE);
+
+            }
+
+            if (permissions.size() == 0) {
+                return;
+            } else {
+                requestPermissions(permissions.toArray(new String[permissions.size()]), 0);
+            }
         }
     }
 

@@ -36,7 +36,12 @@
     <!-- SD卡读取权限，用户写入离线定位数据 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- OpenGLES 2.0 -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
 
     <application
         android:name=".application.FoodSearchApplication"
@@ -77,11 +82,12 @@
         <activity android:name=".activity.DetailBussinessActivity" />
         <activity android:name=".activity.TextActivity" />
         <activity android:name=".activity.AZiZhuCanActivity" />
-        <activity android:name=".activity.DetailMapActivity" />
         <activity android:name=".activity.DeatilActivity" />
         <activity android:name=".activity.YiJianActivity" />
         <activity android:name=".activity.AboutActivity" />
-        <activity android:name=".activity.WebFoodActivity"></activity>
+        <activity android:name=".activity.WebFoodActivity" />
+        <activity android:name=".location.BNaviGuideActivity" />
+        <activity android:name=".activity.MapsActivity"></activity>
     </application>
 
 </manifest>

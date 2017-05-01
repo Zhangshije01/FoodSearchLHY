@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
         <include
+            android:id="@+id/include_detail_business"
             layout="@layout/header_detail_layout"/>
         <ListView
             android:id="@+id/listview_detail_business"

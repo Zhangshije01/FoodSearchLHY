@@ -25,6 +25,12 @@
                 android:id="@+id/item_search_tab_meishi"
                 layout="@layout/item_search_tab_meishi"
                 android:visibility="invisible"/>
+            <ProgressBar
+                android:id="@+id/pb_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="invisible"/>
 
 
         </FrameLayout>

@@ -12,6 +12,7 @@ import com.yang.foodsearch.adapter.MyFragmentAdapter;
 import com.yang.foodsearch.databinding.ActivityMainBinding;
 import com.yang.foodsearch.fragment.MapsFragment;
 import com.yang.foodsearch.fragment.MyFragment;
+import com.yang.foodsearch.fragment.OurFragment;
 import com.yang.foodsearch.fragment.SearchFragment;
 import com.yang.foodsearch.mvp.contract.HomeContract;
 import com.yang.foodsearch.mvp.precenter.HomePresenter;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements HomeContract.MvpV
     private MyFragment myFragment;
     private MapsFragment mapFragment;
     private SearchFragment searchFragment;
+    private OurFragment ourFragment;
     private HomeContract.Presenter mPresenter;
 
     @Override
@@ -38,10 +40,12 @@ public class MainActivity extends AppCompatActivity implements HomeContract.MvpV
         myFragment = new MyFragment();
         mapFragment = new MapsFragment();
         searchFragment = new SearchFragment();
+        ourFragment = new OurFragment();
 
         myFragmentAdapter.addFragment(searchFragment);
         myFragmentAdapter.addFragment(mapFragment);
         myFragmentAdapter.addFragment(myFragment);
+
         mBinding.viewpagerMain.setAdapter(myFragmentAdapter);
     }
 

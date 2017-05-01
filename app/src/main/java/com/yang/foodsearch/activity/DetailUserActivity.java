@@ -32,10 +32,6 @@ public class DetailUserActivity extends AppCompatActivity implements HomeContrac
     private ProgressDialog progressDialog_login;
     private String TAG = "detailuserActivity zsj";
 
-    public static void start(Context context){
-        Intent intent = new Intent(context,DetailUserActivity.class);
-        context.startActivity(intent);
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +68,7 @@ public class DetailUserActivity extends AppCompatActivity implements HomeContrac
 
         BmobQuery<User> query = new BmobQuery<User>();
         //增加一个查询条件
-        query.addWhereEqualTo("userNamer", userName);
+        query.addWhereEqualTo("userName", userName);
         //发起查询
         query.findObjects(DetailUserActivity.this, new FindListener<User>() {
             @Override
